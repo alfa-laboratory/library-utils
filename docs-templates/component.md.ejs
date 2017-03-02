@@ -1,0 +1,104 @@
+# <%- component.name %>
+<%
+function getType(t) {
+    if (typeof t === 'string') {
+        if (t.indexOf('deprecated(') === 0) {
+            return 'Устарело';
+        }
+        return t.replace(/\r?\n/g, ' ').replace(/\s{2,}/g, ' ');
+    }
+    switch (t.typeName) {
+        case 'array':
+            return `Array.\<${getType(t.innerType)}>`;
+        case 'enum':
+        case 'shape':
+            return `[${t.name}](#${t.name})`;
+        case 'union':
+            return t.types.map(getType).join('\\|');
+    }
+    return '';
+}
+function prepareMethod(m) {
+    const params = m.params
+            .map(function (p) {
+                if (p.type) {
+                    return `${p.name}: ${p.type.name}`;
+                }
+                return p.name;
+            })
+            .join(', ');
+    const returns = m.returns
+            ? `: ${m.returns.type.name}`
+            : '';
+    return {
+        name: `${m.name}(${params})${returns}`,
+        description: m.description
+    };
+}
+%>
+<%- (component.description || '') %>
+
+```javascript
+import <%- component.name %> from '<%- libraryName %>/<%- component.source %>';
+```
+<% if (component.examples.length > 0) { %>
+## Примеры
+<% } %>
+<%
+component.examples.forEach(example => {
+%>
+<%- example %>
+<% })%>
+
+<% if (component.props.length > 0 || component.extends) { %>
+## Props
+<% if (component.extends) { %>Расширяет props [<%- component.extends.name %>](../<%- component.extends.source %>)<% } %>
+<% if (component.props.length > 0) { %>
+| Prop  | Тип  | По-умолчанию | Обязательный | Описание |
+| ----- | ---- | ------------ | ------------ |----------|
+<%
+component.props.forEach(prop => {
+%>| <%- prop.name %> | <%- getType(prop.type) %> | <% if (prop.default) { %>`<%- prop.default.replace(/\r?\n/g, '<br>') %>` <% } %> | <% if (prop.required) { %>Да<% } %> | <%- prop.description %> |
+<% }) %>
+<% } %>
+<% } %>
+
+<% if (component.methods.length > 0) { %>
+## Публичные методы
+| Метод  | Описание |
+| ------ | -------- |
+<%
+component.methods.map(prepareMethod).forEach(method => {
+%>| <%- method.name %> | <%- method.description %> |
+<% }) %>
+
+<% } %>
+
+<% if (component.types.length > 0 || component.enums.length > 0) { %>
+## Типы
+<% } %>
+
+<% if (component.types.length > 0) { %>
+<%
+component.types.forEach(type => {
+%>
+### <a id="<%- type.name %>"></a><%- type.name %>
+
+| Prop  | Тип  | Описание |
+| ----- | ---- |----------|
+<%
+type.props.forEach(property => {
+%>| <%- property.name %> | <%- getType(property.type) %> | <%- property.description %> |
+<% }) %>
+<% }) %>
+
+<% } %>
+
+<% if (component.enums.length > 0) { %>
+<% component.enums.forEach(type => { %>
+### <a id="<%- type.name %>"></a><%- type.name %>
+
+<% type.values.forEach(value => { %> * `<%- value %>`
+<% }) %>
+<% }) %>
+<% } %>

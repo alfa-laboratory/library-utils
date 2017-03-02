@@ -1,0 +1,16 @@
+{
+  "name": "library-tools",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "react-component-info": "^1.0.0",
+    "react-to-typescript-definitions": "^0.18.1",
+    "through2": "^2.0.3",
+    "vinyl": "^2.0.1"
+  },
+  "publishConfig": {
+    "registry": "http://mvn/artifactory/api/npm/npm-local"
+  }
+}

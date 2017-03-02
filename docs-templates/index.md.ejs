@@ -1,0 +1,7 @@
+### Документация по интерфейсам компонентов <%- libraryName %>
+
+<% components.forEach(component => { %>
+#### [<%- component.name %>](./<%- component.source %>/)
+<%- (component.description || '').split('\n')[0] %>
+
+<% }) %>
