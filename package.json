@@ -1,14 +1,24 @@
 {
-  "name": "library-tools",
+  "name": "library-utils",
   "version": "0.0.1",
   "main": "index.js",
-  "license": "MIT",
+  "description": "Utils for component libraries processing and compilation",
+  "repository": "ssh://git@git/ef/library-utils.git",
+  "author": "Good guys from Alfa Laboratory",
+  "license": "LicenseRef-LICENSE",
   "dependencies": {
     "ejs": "^2.5.6",
     "react-component-info": "^1.0.0",
     "react-to-typescript-definitions": "^0.18.1",
     "through2": "^2.0.3",
     "vinyl": "^2.0.1"
+  },
+  "scripts": {
+    "release-patch": "npm version patch -m 'chore(*): patch version'",
+    "release-minor": "npm version minor -m 'chore(*): minor version'",
+    "release-major": "npm version major -m 'chore(*): major version'",
+    "version": "git fetch --tags",
+    "postversion": "git push origin master && git push --tags && npm publish"
   },
   "publishConfig": {
     "registry": "http://mvn/artifactory/api/npm/npm-local"
