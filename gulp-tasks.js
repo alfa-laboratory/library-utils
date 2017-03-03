@@ -15,7 +15,7 @@ const libraryDoc = require('./library-doc');
 
 const defaultOptions = {
     publishDir: '.publish',
-    docsDir: '.docs',
+    docsDir: 'docs',
     tsConfigFilename: 'tsconfig.json',
     componentsGlob: ['src/*/*.jsx', '!src/*/*-test.jsx', '!src/*/*-benchmark.jsx'],
     tsComponentsGlob: ['src/*/*.tsx'],
@@ -29,10 +29,7 @@ const defaultOptions = {
 
 
 function createTasks(packageName, options = {}) {
-    options = {
-        ...defaultOptions,
-        ...options
-    };
+    options = Object.assign({}, defaultOptions, options);
     const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
     const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
 
