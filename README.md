@@ -1,6 +1,18 @@
 Набор утилит для компиляции и генерации доков для react компонентов
 ===================================================================
 
+gulpfile
+--------
+Готовый gulpfile со всеми настройками, необходимыми для сборки библиотеки
+
+Ваш `package.json`:
+```
+"docs": "gulp --cwd . --gulpfile ./node_modules/library-utils/gulpfile.js docs",
+"compile": "gulp --cwd . --gulpfile ./node_modules/library-utils/gulpfile.js compile",
+```
+
+Для более тонкой настройки используйте gulp-tasks.
+
 gulp-tasks
 ----------
 
