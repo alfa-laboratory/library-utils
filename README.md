@@ -1,6 +1,38 @@
 Набор утилит для компиляции и генерации доков для react компонентов
 ===================================================================
 
+gulp-tasks
+----------
+
+Вы можете использовать готовый набор gulp-задач.
+
+Пример `gulpfile` вашего проекта:
+```
+const createTasks = require('library-utils/gulp-tasks');
+createTasks('arui-feather');
+```
+
+Таким образом будет создано две задачи:
+
+* `gulp docs` - построение документации по компонентам
+* `gulp compile` - компиляция css/js/ts файлов библиотеки, подготовка к публикации.
+
+Параметры createTask
+
+* `packageName` - обязательный. Имя пакета. Будет использоваться для генерации документации и тайпингов.
+* `options` - не обязательный. Настройки путей.
+  * `publishDir` - имя папки для публикации, туда будут записываться скомпилированные файлы
+  * `docsDir` - имя папки для документации
+  * `tsConfigFilename` - путь до файла с конфигурацией typescript.
+  * `componentsGlob` - glob для файлов js компонентов
+  * `tsComponentsGlob` - glob для файлов ts компонентов
+  * `jsGlob` - glob для всех публикуемых js файлов пакета
+  * `tsGlob` - glob для всех публикуемых ts файлов пакета
+  * `cssGlob` - glob для всех публикуемых css файлов пакета
+  * `cssCopyGlob` - glob для всех копируемых css фалов пакета
+  * `resourcesGlob` - glob для всех ресурсных файлов пакета (картинки, шрифты)
+  * `publishFilesGlob` - glob для всех дополнительных файлов, которые должны попасть в публикацию
+
 componentPackage
 ----------------
 
@@ -17,7 +49,7 @@ component-name/
 Пример использования:
 
 ```js
-const componentPackage = require('library-tools/component-package');
+const componentPackage = require('library-utils/component-package');
 
 gulp.src('file.js')
     .pipe(componentPackage())
@@ -41,7 +73,7 @@ componentTypings
 Пример использования:
 
 ```js
-const componentTypings = require('library-tools/component-typings');
+const componentTypings = require('library-utils/component-typings');
 
 gulp.src('file.js')
     .pipe(componentTypings('libraryName'))
@@ -78,7 +110,7 @@ componentDocs
 Пример использования:
 
 ```js
-const componentDocs = require('library-tools/component-docs');
+const componentDocs = require('library-utils/component-docs');
 
 gulp.src('file.js')
     .pipe(componentDocs('libraryName'))
@@ -95,7 +127,7 @@ libraryDoc
 Пример использования:
 
 ```js
-const libraryDoc = require('library-tools/library-doc');
+const libraryDoc = require('library-utils/library-doc');
 
 gulp.src('src/*.js')
     .pipe(libraryDoc('libraryName'))

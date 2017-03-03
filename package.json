@@ -7,10 +7,20 @@
   "author": "Good guys from Alfa Laboratory",
   "license": "LicenseRef-LICENSE",
   "dependencies": {
+    "del": "^2.2.2",
     "ejs": "^2.5.6",
+    "event-stream": "^3.3.4",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clone": "^1.0.0",
+    "gulp-postcss": "^6.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-typescript": "^3.1.5",
     "react-component-info": "^1.0.0",
     "react-to-typescript-definitions": "^0.18.1",
     "through2": "^2.0.3",
+    "typescript": "^2.2.1",
     "vinyl": "^2.0.1"
   },
   "scripts": {
