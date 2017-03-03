@@ -22,7 +22,8 @@ function libraryDoc(libraryName) {
         }
         latestFile = file;
         const componentName = path.parse(file.path).name;
-        components.push(structureForFile(file, componentName));
+        const content = file.contents.toString('utf8');
+        components.push(structureForFile(content, componentName));
 
         return callback();
     }
