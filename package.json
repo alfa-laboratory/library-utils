@@ -1,6 +1,6 @@
 {
   "name": "library-utils",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "main": "index.js",
   "description": "Utils for component libraries processing and compilation",
   "repository": "ssh://git@git/ef/library-utils.git",
