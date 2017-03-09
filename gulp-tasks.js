@@ -115,7 +115,7 @@ function createTasks(packageName, options = {}) {
         const jsDocs = gulp.src(options.componentsGlob)
             .pipe(componentDocs(packageName));
 
-        const indexFile = es.merge(gulp.src(options.componentsGlob), tsToJs)
+        const indexFile = es.merge([gulp.src(options.componentsGlob)].concat(isTsEnabled ? [tsToJs] : []))
             .pipe(libraryDoc(packageName))
             .pipe(rename((filePath) => {
                 filePath.dirname = '';
@@ -124,7 +124,7 @@ function createTasks(packageName, options = {}) {
             }));
 
         return es
-            .merge(tsDocs, jsDocs, indexFile)
+            .merge([jsDocs, indexFile].concat(isTsEnabled ? [tsDocs] : []))
             .pipe(gulp.dest(options.docsDir));
     });
 
