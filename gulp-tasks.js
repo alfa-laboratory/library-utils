@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
@@ -24,14 +26,15 @@ const defaultOptions = {
     cssGlob: ['src/**/*.css', '!src/vars/*.css', '!src/vars.css'],
     cssCopyGlob: ['src/**/vars/*.css', 'src/**/vars.css'],
     resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,json}'],
-    publishFilesGlob: ['package.json', '*.md', 'LICENSE'],
+    publishFilesGlob: ['package.json', '*.md', 'LICENSE']
 };
 
 
 function createTasks(packageName, options = {}) {
     options = Object.assign({}, defaultOptions, options);
-    const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
-    const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
+    const tsConfigPath = path.resolve(process.cwd(), options.tsConfigFilename);
+    const isTsEnabled = fs.existsSync(tsConfigPath);
+
 
     gulp.task('clean', () => del([options.publishDir]));
     gulp.task('clean:docs', () => del([options.publishDir]));
@@ -44,6 +47,7 @@ function createTasks(packageName, options = {}) {
     );
 
     gulp.task('ts:compile', ['clean'], () => {
+        const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
         const tsResult = gulp.src(options.tsGlob)
             .pipe(sourcemaps.init())
             .pipe(tsProject());
@@ -98,16 +102,20 @@ function createTasks(packageName, options = {}) {
     );
 
     gulp.task('docs', ['clean:docs'], () => {
-        const tsToJs = gulp.src(['src/*/*.tsx'])
-            .pipe(tsDocsProject(ts.reporter.nullReporter())).js;
-
-        const tsDocs = tsToJs.pipe(clone())
-            .pipe(componentDocs(packageName));
+        let tsToJs;
+        let tsDocs;
+        if (isTsEnabled) {
+            const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
+            tsToJs = gulp.src(['src/*/*.tsx'])
+                .pipe(tsDocsProject(ts.reporter.nullReporter())).js;
+            tsDocs = tsToJs.pipe(clone())
+                .pipe(componentDocs(packageName));
+        }
 
         const jsDocs = gulp.src(options.componentsGlob)
             .pipe(componentDocs(packageName));
 
-        const indexFile = es.merge(tsToJs.pipe(clone()), gulp.src(options.componentsGlob))
+        const indexFile = es.merge(gulp.src(options.componentsGlob), tsToJs)
             .pipe(libraryDoc(packageName))
             .pipe(rename((filePath) => {
                 filePath.dirname = '';
@@ -120,7 +128,9 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.docsDir));
     });
 
-    gulp.task('compile', ['js', 'ts', 'css', 'resources', 'typings', 'publish-files']);
+    gulp.task('compile',
+        ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : [])
+    );
 }
 
 module.exports = createTasks;
