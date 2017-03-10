@@ -4,6 +4,8 @@ function getType(t) {
     if (typeof t === 'string') {
         if (t.indexOf('deprecated(') === 0) {
             return 'Устарело';
+        } else if (t === 'styleType') {
+            return 'CSSStyleDeclaration';
         }
         return t.replace(/\r?\n/g, ' ').replace(/\s{2,}/g, ' ');
     }
