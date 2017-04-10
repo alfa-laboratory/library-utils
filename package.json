@@ -3,9 +3,12 @@
   "version": "1.0.4",
   "main": "index.js",
   "description": "Utils for component libraries processing and compilation",
-  "repository": "ssh://git@git/ef/library-utils.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alfa-laboratory/library-utils.git"
+  },
   "author": "Good guys from Alfa Laboratory",
-  "license": "LicenseRef-LICENSE",
+  "license": "MIT",
   "dependencies": {
     "del": "^2.2.2",
     "ejs": "^2.5.6",
@@ -29,8 +32,5 @@
     "release-major": "npm version major -m 'chore(*): major version'",
     "version": "git fetch --tags",
     "postversion": "git push origin master && git push --tags && npm publish"
-  },
-  "publishConfig": {
-    "registry": "http://mvn/artifactory/api/npm/npm-local"
   }
 }
