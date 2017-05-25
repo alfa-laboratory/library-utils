@@ -94,9 +94,11 @@ asty@~1.4.8:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/asty/-/asty-1.4.8.tgz#4dbc11c25a61abe5fba4f2f6d770d7ca41e607ff"
 
-async@^1.4.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
+async@^2.1.4:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.4.1.tgz#62a56b279c98a11d0987096a01cc3eeb8eb7bbd7"
+  dependencies:
+    lodash "^4.14.0"
 
 atob@~1.1.0:
   version "1.1.3"
@@ -228,6 +230,10 @@ beeper@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/beeper/-/beeper-1.1.1.tgz#e6d5ea8c5dad001304a70b22638447f69cb2f809"
 
+bluebird@^3.0.5:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
+
 brace-expansion@^1.0.0:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.6.tgz#7197d7eaa9b87e648390ea61fc66c84427420df9"
@@ -276,6 +282,10 @@ camelcase@^1.2.1:
 camelcase@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
+
+camelcase@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 chalk@^0.5.0:
   version "0.5.1"
@@ -330,6 +340,10 @@ commander@^2.9.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
   dependencies:
     graceful-readlink ">= 1.0.0"
+
+commandpost@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/commandpost/-/commandpost-1.0.1.tgz#7d7e3e69ae8fe7d6949341e91596ede9b2d631fd"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -477,6 +491,15 @@ duplexify@^3.2.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
+
+editorconfig@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-0.13.2.tgz#8e57926d9ee69ab6cb999f027c2171467acceb35"
+  dependencies:
+    bluebird "^3.0.5"
+    commander "^2.9.0"
+    lru-cache "^3.2.0"
+    sigmund "^1.0.1"
 
 ejs@^2.5.6:
   version "2.5.6"
@@ -909,7 +932,7 @@ gulp-sourcemaps@1.6.0:
     through2 "^2.0.0"
     vinyl "^1.0.0"
 
-gulp-sourcemaps@~2.4.1:
+gulp-sourcemaps@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/gulp-sourcemaps/-/gulp-sourcemaps-2.4.1.tgz#8f65dc5c0d07b2fd5c88bc60ec7f13e56716bf74"
   dependencies:
@@ -1487,7 +1510,7 @@ lodash.values@~2.4.1:
   dependencies:
     lodash.keys "~2.4.1"
 
-lodash@^4.2.0, lodash@~4.17.2:
+lodash@^4.14.0, lodash@^4.2.0, lodash@~4.17.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -1515,6 +1538,12 @@ lower-case@^1.1.1:
 lru-cache@2:
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-2.7.3.tgz#6d4524e8b955f95d4f5b58851ce21dd72fb4e952"
+
+lru-cache@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-3.2.0.tgz#71789b3b7f5399bec8565dda38aa30d2a097efee"
+  dependencies:
+    pseudomap "^1.0.1"
 
 map-cache@^0.2.0:
   version "0.2.2"
@@ -1872,6 +1901,10 @@ process-nextick-args@^1.0.6, process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
+pseudomap@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
+
 quote-stream@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/quote-stream/-/quote-stream-0.0.0.tgz#cde29e94c409b16e19dc7098b89b6658f9721d3b"
@@ -1895,11 +1928,11 @@ react-component-info@^1.0.0:
     react-docgen "^2.13.0"
     uppercamelcase "^1.1.0"
 
-react-docgen@^2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/react-docgen/-/react-docgen-2.13.0.tgz#7fcc4a3104ea8d4fd428383ba38df11166837be9"
+react-docgen@^2.13.0, react-docgen@^2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/react-docgen/-/react-docgen-2.15.0.tgz#11aced462256e4862b14e6af6e46bdcefacb28bb"
   dependencies:
-    async "^1.4.2"
+    async "^2.1.4"
     babel-runtime "^6.9.2"
     babylon "~5.8.3"
     commander "^2.9.0"
@@ -2061,7 +2094,7 @@ shallow-copy@~0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/shallow-copy/-/shallow-copy-0.0.1.tgz#415f42702d73d810330292cc5ee86eae1a11a170"
 
-sigmund@~1.0.0:
+sigmund@^1.0.1, sigmund@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/sigmund/-/sigmund-1.0.1.tgz#3ff21f198cad2175f9f3b781853fd94d0d19b590"
 
@@ -2297,6 +2330,13 @@ typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
+typescript-formatter@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/typescript-formatter/-/typescript-formatter-5.2.0.tgz#cd45294f74c4cc880f48f81983a21fb264f6f173"
+  dependencies:
+    commandpost "^1.0.0"
+    editorconfig "^0.13.2"
+
 typescript@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.1.tgz#4862b662b988a4c8ff691cc7969622d24db76ae9"
@@ -2331,6 +2371,12 @@ uppercamelcase@^1.1.0:
   resolved "https://registry.yarnpkg.com/uppercamelcase/-/uppercamelcase-1.1.0.tgz#324d98a6b3afc7e8a8953e10641509b0e4e23f97"
   dependencies:
     camelcase "^1.2.1"
+
+uppercamelcase@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/uppercamelcase/-/uppercamelcase-3.0.0.tgz#380b321b8d73cba16fec4d752a575152d1ef7317"
+  dependencies:
+    camelcase "^4.1.0"
 
 urix@^0.1.0, urix@~0.1.0:
   version "0.1.0"
