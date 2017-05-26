@@ -22,7 +22,6 @@
     "gulp-typescript": "^3.1.5",
     "react-component-info": "^1.0.0",
     "react-docgen": "^2.15.0",
-    "react-to-typescript-definitions": "^0.18.1",
     "through2": "^2.0.3",
     "typescript": "^2.2.1",
     "typescript-formatter": "^5.2.0",
@@ -34,6 +33,13 @@
     "release-minor": "npm version minor -m 'chore(*): minor version'",
     "release-major": "npm version major -m 'chore(*): major version'",
     "version": "git fetch --tags",
-    "postversion": "git push origin master && git push --tags && npm publish"
+    "precommit": "npm run lint",
+    "postversion": "git push origin master && git push --tags && npm publish",
+    "lint": "eslint --fix ./*.js "
+  },
+  "devDependencies": {
+    "arui-presets": "^2.2.0",
+    "eslint": "^3.19.0",
+    "husky": "^0.13.3"
   }
 }

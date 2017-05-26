@@ -20,11 +20,11 @@ function componentTypings(libraryName) {
             callback(null, new Vinyl({
                 cwd: file.cwd,
                 base: file.base,
-                path: path.join(path.dirname(file.path), componentName + '.d.ts'),
+                path: path.join(path.dirname(file.path), `${componentName}.d.ts`),
                 contents: Buffer(definitionsContent)
             }));
         }).catch((e) => {
-            console.log(e);
+            console.error(e);
         });
     }
 

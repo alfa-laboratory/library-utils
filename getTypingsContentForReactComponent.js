@@ -1,8 +1,10 @@
+/* eslint no-use-before-define: ["error", { "functions": false }] */
+
 const fs = require('fs');
 const path = require('path');
 const reactDockGen = require('react-docgen');
 const upperCamelCase = require('uppercamelcase');
-const tsfmt = require("typescript-formatter");
+const tsfmt = require('typescript-formatter');
 
 
 const documentation = { };
@@ -22,51 +24,16 @@ function getReactComponentInfo(filePath, resolver, handlers) {
         info.composes = [];
     }
     // filter public methods
-    info.methods = info.methods.filter(({docblock}) => docblock && docblock.indexOf('@public') !== -1);
+    info.methods = info.methods.filter(({ docblock }) => docblock && docblock.indexOf('@public') !== -1);
     // extends props for composed components
     info.props = info.composes.reduce((prev, item) => Object.assign({}, prev, item.props), info.props || {});
     documentation[filePath] = info;
     return info;
 }
 
-function getReactComponentDefinitionsContent(info, componentModuleName, projectName) {
-    const moduleName = `${projectName}/${componentModuleName}`;
-    const componentName = upperCamelCase(componentModuleName);
-    /* TODO: сделать полноценное наследование
-        doc.composes.length > 0? `extends ${doc.composes.map(({componentName}) => `${componentName}Props`).join(' & ')}`: ''
-    */
-    /* TODO: сделать полноценное наследование doc.composes.map(({ componentName, filePath }) =>
-        `import { ${componentName}Props } from './${path.relative(path.dirname(doc.filePath), filePath )}'`
-    )*/
-    const content = (
-        `declare module '${moduleName}' {
-            import { Component, ReactNode } from 'react';
-            
-            export interface ${componentName}Props {
-                ${Object.keys(info.props).map(propName => {
-                    const { required, type, description, docblock } = info.props[propName];
-                    return (
-                        `${stringifyDescription(description, docblock)}
-                        ${propName}${required? '': '?'}: ${stringifyType(type)};`
-                    );
-                }).join('')}
-            }
-
-            ${stringifyDescription(info.description, info.docblock)}
-            export default class ${componentName} extends Component<${componentName}Props, any> {
-                ${info.methods.map(({ name, docblock, params, description }) => (
-                    `${stringifyDescription(description, docblock)}
-                    ${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`
-                )).join('')}
-            }
-        }`
-    );
-    return content;
-}
-
-function stringifyType(type){
+function stringifyType(type) {
     switch (type.name) {
-        case 'string': 
+        case 'string':
             return 'string';
         case 'number':
             return 'number';
@@ -76,14 +43,14 @@ function stringifyType(type){
             return 'Array<any>';
         case 'node':
             return 'ReactNode';
-        case 'union': 
+        case 'union':
             return stringifyUnion(type);
         case 'func':
             return 'Function';
         case 'enum':
-            return stringifyEnum(type);  
+            return stringifyEnum(type);
         case 'arrayOf':
-            return stringifyArray(type);  
+            return stringifyArray(type);
         case 'shape':
             return stringifyShape(type);
         case 'objectOf':
@@ -91,9 +58,9 @@ function stringifyType(type){
         case 'object':
             return 'object';
         case 'any':
-            return 'any';    
+            return 'any';
         default:
-            return 'any' + 
+            return 'any' +
                 `/* Не нашелся встроенный тип для типа ${JSON.stringify(type)}
                  * https://github.com/alfa-laboratory/library-utils/issues/new 
                  */`;
@@ -105,11 +72,25 @@ function stringifyArray(type) {
 }
 
 function stringifyEnum(type) {
-    return `${type.value.map(({value})=> value).join(' | ')}`;
+    return `${type.value.map(({ value }) => value).join(' | ')}`;
 }
 
 function stringifyUnion(type) {
-    return `${type.value.map(type => stringifyType(type)).join(' | ')}`
+    return `${type.value.map(type => stringifyType(type)).join(' | ')}`;
+}
+
+function stringifyDescription(description, docblock) {
+    return !description ? '' : `
+    /**
+     * ${description || docblock}
+     */`;
+}
+
+function stringifyField(name, type) {
+    return (
+        `${stringifyDescription(type.description, type.docblock)}
+         ${name}${type.required ? '' : '?'}: ${stringifyType(type)}`
+    );
 }
 
 function stringifyShape(type) {
@@ -126,26 +107,41 @@ function stringifyObjectOf(type) {
     }`;
 }
 
-function stringifyField(name, type) {
-    return (
-        `${stringifyDescription(type.description, type.docblock)}
-        ${name}${type.required? '': '?'}: ${stringifyType(type)}`
-    );
-}
+function getReactComponentDefinitionsContent(info, componentModuleName, projectName) {
+    const moduleName = `${projectName}/${componentModuleName}`;
+    const componentName = upperCamelCase(componentModuleName);
+    const content = (
+        `declare module '${moduleName}' {
+            import { Component, ReactNode } from 'react';
+            
+            export interface ${componentName}Props {
+                ${Object.keys(info.props).map((propName) => {
+                    const { required, type, description, docblock } = info.props[propName];
+                    return (
+                        `${stringifyDescription(description, docblock)}
+                        ${propName}${required ? '' : '?'}: ${stringifyType(type)};`
+                    );
+                }).join('')}
+            }
 
-function stringifyDescription(description, docblock) {
-    return !description? '':`
-    /**
-     * ${description}
-     */`;
+            ${stringifyDescription(info.description, info.docblock)}
+            export default class ${componentName} extends Component<${componentName}Props, any> {
+                ${info.methods.map(({ name, docblock, params, description }) => (
+                    `${stringifyDescription(description, docblock)}
+                    ${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`
+                )).join('')}
+            }
+        }`
+    );
+    return content;
 }
 
 function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const componentName = path.parse(filePath).name;
         const componentInfo = getReactComponentInfo(filePath, undefined, undefined);
         const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
-        tsfmt.processString("", definitionsContent, {
+        tsfmt.processString('', definitionsContent, {
             dryRun: true,
             replace: false,
             verify: false,
@@ -153,8 +149,8 @@ function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
             tslint: false,
             editorconfig: false,
             tsfmt: true
-        }).then(result => {
-            const formattedDefinitionsContent = result.dest
+        }).then((result) => {
+            const formattedDefinitionsContent = result.dest;
             resolve(formattedDefinitionsContent);
         });
     });
