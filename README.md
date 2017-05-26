@@ -77,8 +77,8 @@ gulp.src('file.js')
 componentTypings
 ----------------
 
-Плагин для создания `d.ts` файлов на основе react компонентов. Внутри использует библиотеку
-[react-to-typescript-definitions](https://www.npmjs.com/package/react-to-typescript-definitions).
+Плагин для создания `d.ts` файлов для react компонентов. Внутри использует библиотеку
+[react-docgen](https://github.com/reactjs/react-docgen).
 Поддерживается генерация только из es6+ кода (не будет работать для уже скомпилированного кода).
 
 Пример использования:
