@@ -10,8 +10,8 @@ const Vinyl = require('vinyl');
  */
 function getComponentPackage(componentName) {
     return JSON.stringify({
-        main: componentName + '.js',
-        types: componentName + '.d.ts',
+        main: `${componentName}.js`,
+        types: `${componentName}.d.ts`
     });
 }
 
@@ -31,7 +31,7 @@ function componentPackage() {
         callback(null, new Vinyl({
             cwd: file.cwd,
             base: file.base,
-            path: path.dirname(file.path) + '/package.json',
+            path: `${path.dirname(file.path)}/package.json`,
             contents: new Buffer(getComponentPackage(componentName))
         }));
     }

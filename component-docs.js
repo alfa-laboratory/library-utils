@@ -22,12 +22,12 @@ function componentDocs(libraryName) {
         const content = file.contents.toString('utf8');
         const componentName = path.parse(file.path).name;
         const description = structureForFile(content, componentName);
-        const doc = ejs.render(TEMPLATE_COMPONENT, { component: description, libraryName: libraryName });
+        const doc = ejs.render(TEMPLATE_COMPONENT, { component: description, libraryName });
 
         callback(null, new Vinyl({
             cwd: file.cwd,
             base: file.base,
-            path: path.dirname(file.path) + '/README.md',
+            path: `${path.dirname(file.path)}/README.md`,
             contents: new Buffer(doc)
         }));
     }

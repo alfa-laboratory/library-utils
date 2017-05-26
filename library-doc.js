@@ -9,9 +9,10 @@ const TEMPLATE_INDEX = fs.readFileSync(path.join(__dirname, '/docs-templates/ind
 
 /**
  * Gulp plugin to get index README file for all components.
- *
+ * @param {String} libraryName Library name, will be used in docs.
  * @returns {Function}
  */
+
 function libraryDoc(libraryName) {
     let latestFile;
     const components = [];
@@ -39,7 +40,7 @@ function libraryDoc(libraryName) {
             return 0;
         });
 
-        const content = ejs.render(TEMPLATE_INDEX, { components: components, libraryName });
+        const content = ejs.render(TEMPLATE_INDEX, { components, libraryName });
         this.push(new Vinyl({
             path: latestFile.path,
             contents: new Buffer(content)
