@@ -35,7 +35,7 @@
     "version": "git fetch --tags",
     "precommit": "npm run lint",
     "postversion": "git push origin master && git push --tags && npm publish",
-    "lint": "eslint --fix ./*.js "
+    "lint": "eslint ./*.js"
   },
   "devDependencies": {
     "arui-presets": "^2.2.0",
