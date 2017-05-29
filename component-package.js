@@ -1,16 +1,20 @@
 const path = require('path');
+const fs = require('fs');
 const through = require('through2');
 const Vinyl = require('vinyl');
 
 /**
  * Generate package.json content for component.
  *
- * @param {String} componentName Filename of component.
+ * @param {*} file Gulp stream file instance
  * @returns {String}
  */
-function getComponentPackage(componentName) {
+function getComponentPackage(file) {
+    const dirname = path.dirname(file.path);
+    const componentName = path.parse(file.path).name;
+    const isIndexFileExist = fs.existsSync(path.join(dirname, 'index.js'));
     return JSON.stringify({
-        main: `${componentName}.js`,
+        main: isIndexFileExist ? 'index.js' : `${componentName}.js`,
         types: `${componentName}.d.ts`
     });
 }
@@ -26,13 +30,13 @@ function componentPackage() {
             callback();
             return;
         }
-        let componentName = path.parse(file.path).name;
+        const dirname = path.dirname(file.path);
 
         callback(null, new Vinyl({
             cwd: file.cwd,
             base: file.base,
-            path: `${path.dirname(file.path)}/package.json`,
-            contents: new Buffer(getComponentPackage(componentName))
+            path: path.join(dirname, 'package.json'),
+            contents: new Buffer(getComponentPackage(file))
         }));
     }
 
