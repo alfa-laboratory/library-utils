@@ -50,7 +50,10 @@ function createTasks(packageName, options = {}) {
         const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
         const tsResult = gulp.src(options.tsGlob)
             .pipe(sourcemaps.init())
-            .pipe(tsProject());
+            .pipe(tsProject())
+            .once('error', function () {
+                this.once('finish', () => process.exit(1));
+            });
 
         return es
             .merge(tsResult.js, tsResult.dts)
