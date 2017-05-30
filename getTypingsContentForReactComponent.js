@@ -103,7 +103,7 @@ function stringifyShape(type) {
 function stringifyObjectOf(type) {
     const fieldType = type.value;
     return `{
-        [key: any]: ${stringifyType(fieldType)};
+        [key: string]: ${stringifyType(fieldType)};
     }`;
 }
 
