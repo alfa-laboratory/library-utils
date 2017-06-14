@@ -24,7 +24,11 @@ function libraryDoc(libraryName) {
         latestFile = file;
         const componentName = path.parse(file.path).name;
         const content = file.contents.toString('utf8');
-        components.push(structureForFile(content, componentName));
+        try {
+            components.push(structureForFile(content, componentName));
+        } catch (e) {
+            console.warn(`unable to build docs for ${file.path}`);
+        }
 
         return callback();
     }
