@@ -77,31 +77,30 @@ function stringifyObjectOf(type) {
     }`;
 }
 
-function stringifyComponentDefinition(info, componentModuleName, projectName) {
-    const moduleName = `${projectName}/${componentModuleName}`;
+function stringifyComponentDefinition(info, componentModuleName) {
     const componentName = upperCamelCase(componentModuleName);
     return (
-        `declare module '${moduleName}' {
-            import { Component, ReactNode } from 'react';
-            
-            export interface ${componentName}Props {
-                ${Object.keys(info.props).map((propName) => {
-                    const { required, type, description, docblock } = info.props[propName];
-                    return (
-                        `${stringifyDescription(description, docblock)}
-                                        ${propName}${required ? '' : '?'}: ${stringifyType(type)};`
-                    );
-                }).join('')}
-            }
+        `
+        import { Component, ReactNode } from 'react';
+        
+        export interface ${componentName}Props {
+            ${Object.keys(info.props).map((propName) => {
+                const { required, type, description, docblock } = info.props[propName];
+                return (
+                    `${stringifyDescription(description, docblock)}
+                                    ${propName}${required ? '' : '?'}: ${stringifyType(type)};`
+                );
+            }).join('')}
+        }
 
-            ${stringifyDescription(info.description, info.docblock)}
-            export default class ${componentName} extends Component<${componentName}Props, any> {
-                ${info.methods.map(({ name, docblock, params, description }) => (
-            `${stringifyDescription(description, docblock)}
-                    ${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`
-        )).join('')}
-            }
-        }`
+        ${stringifyDescription(info.description, info.docblock)}
+        export default class ${componentName} extends Component<${componentName}Props, any> {
+            ${info.methods.map(({ name, docblock, params, description }) => (
+                `${stringifyDescription(description, docblock)}
+                        ${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`
+            )).join('')}
+        }
+        `
     );
 }
 

@@ -14,7 +14,10 @@ function getSourceFileContent(filePath, parentPath) {
             content: fs.readFileSync(filePath, 'utf8')
         };
     }
-    if (parentPath && fs.existsSync(path.resolve(parentPath, `${filePath}.jsx`))) { // relative path
+    if (parentPath) { // relative path
+        if (path.extname(parentPath)) {
+            parentPath = path.dirname(parentPath);
+        }
         filePath = path.resolve(parentPath, `${filePath}.jsx`);
         return {
             filePath,

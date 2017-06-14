@@ -7,11 +7,14 @@ const formatTs = require('./format-ts');
 function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
     return new Promise((resolve) => {
         const componentName = path.parse(filePath).name;
-        const componentInfo = getReactComponentInfo(filePath, undefined);
-        const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
-
-        formatTs(definitionsContent)
-            .then(resolve);
+        try {
+            const componentInfo = getReactComponentInfo(filePath, undefined);
+            const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
+            formatTs(definitionsContent)
+                .then(resolve);
+        } catch (e) {
+            resolve(null);
+        }
     });
 }
 
