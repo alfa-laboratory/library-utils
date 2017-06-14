@@ -61,7 +61,7 @@ component-name/
 Пример использования:
 
 ```js
-const componentPackage = require('library-utils/component-package');
+const componentPackage = require('library-utils/gulp/component-package');
 
 gulp.src('file.js')
     .pipe(componentPackage())
@@ -84,7 +84,7 @@ componentTypings
 Пример использования:
 
 ```js
-const componentTypings = require('library-utils/component-typings');
+const componentTypings = require('library-utils/gulp/component-typings');
 
 gulp.src('file.js')
     .pipe(componentTypings('libraryName'))
@@ -120,7 +120,7 @@ componentDocs
 Пример использования:
 
 ```js
-const componentDocs = require('library-utils/component-docs');
+const componentDocs = require('library-utils/gulp/component-docs');
 
 gulp.src('file.js')
     .pipe(componentDocs('libraryName'))
@@ -137,7 +137,7 @@ libraryDoc
 Пример использования:
 
 ```js
-const libraryDoc = require('library-utils/library-doc');
+const libraryDoc = require('library-utils/gulp/library-doc');
 
 gulp.src('src/*.js')
     .pipe(libraryDoc('libraryName'))

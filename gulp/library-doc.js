@@ -5,7 +5,7 @@ const through = require('through2');
 const Vinyl = require('vinyl');
 const ejs = require('ejs');
 
-const TEMPLATE_INDEX = fs.readFileSync(path.join(__dirname, '/docs-templates/index.md.ejs'), 'utf8');
+const TEMPLATE_INDEX = fs.readFileSync(path.join(__dirname, '../docs-templates/index.md.ejs'), 'utf8');
 
 /**
  * Gulp plugin to get index README file for all components.

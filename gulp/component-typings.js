@@ -1,7 +1,7 @@
 const Vinyl = require('vinyl');
 const through = require('through2');
 const path = require('path');
-const getReactComponentDefinitionsContent = require('./getTypingsContentForReactComponent');
+const getReactComponentDefinitionsContent = require('../typings/index');
 
 /**
  * Gulp plugin to generate react typings and root package.json for each component.

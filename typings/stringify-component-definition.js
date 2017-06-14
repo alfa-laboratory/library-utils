@@ -1,35 +1,5 @@
-/* eslint no-use-before-define: ["error", { "functions": false }] */
-
-const fs = require('fs');
-const path = require('path');
-const reactDockGen = require('react-docgen');
+/* eslint no-use-before-define: ["error", "nofunc"] */
 const upperCamelCase = require('uppercamelcase');
-const tsfmt = require('typescript-formatter');
-
-
-const documentation = { };
-function getReactComponentInfo(filePath, resolver, handlers) {
-    if (documentation[filePath]) {
-        return documentation[filePath];
-    }
-    const content = fs.readFileSync(filePath);
-    const info = reactDockGen.parse(content, resolver, handlers);
-    info.filePath = filePath;
-    if (info.composes) {
-        info.composes = info.composes.map((relativePath) => {
-            const composeComponentPath = path.resolve(path.dirname(filePath), `${relativePath}.jsx`);
-            return getReactComponentInfo(composeComponentPath, resolver, handlers);
-        });
-    } else {
-        info.composes = [];
-    }
-    // filter public methods
-    info.methods = info.methods.filter(({ docblock }) => docblock && docblock.indexOf('@public') !== -1);
-    // extends props for composed components
-    info.props = info.composes.reduce((prev, item) => Object.assign({}, prev, item.props), info.props || {});
-    documentation[filePath] = info;
-    return info;
-}
 
 function stringifyType(type) {
     switch (type.name) {
@@ -107,10 +77,10 @@ function stringifyObjectOf(type) {
     }`;
 }
 
-function getReactComponentDefinitionsContent(info, componentModuleName, projectName) {
+function stringifyComponentDefinition(info, componentModuleName, projectName) {
     const moduleName = `${projectName}/${componentModuleName}`;
     const componentName = upperCamelCase(componentModuleName);
-    const content = (
+    return (
         `declare module '${moduleName}' {
             import { Component, ReactNode } from 'react';
             
@@ -119,7 +89,7 @@ function getReactComponentDefinitionsContent(info, componentModuleName, projectN
                     const { required, type, description, docblock } = info.props[propName];
                     return (
                         `${stringifyDescription(description, docblock)}
-                        ${propName}${required ? '' : '?'}: ${stringifyType(type)};`
+                                        ${propName}${required ? '' : '?'}: ${stringifyType(type)};`
                     );
                 }).join('')}
             }
@@ -127,33 +97,12 @@ function getReactComponentDefinitionsContent(info, componentModuleName, projectN
             ${stringifyDescription(info.description, info.docblock)}
             export default class ${componentName} extends Component<${componentName}Props, any> {
                 ${info.methods.map(({ name, docblock, params, description }) => (
-                    `${stringifyDescription(description, docblock)}
+            `${stringifyDescription(description, docblock)}
                     ${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`
-                )).join('')}
+        )).join('')}
             }
         }`
     );
-    return content;
 }
 
-function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
-    return new Promise((resolve) => {
-        const componentName = path.parse(filePath).name;
-        const componentInfo = getReactComponentInfo(filePath, undefined, undefined);
-        const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
-        tsfmt.processString('', definitionsContent, {
-            dryRun: true,
-            replace: false,
-            verify: false,
-            tsconfig: false,
-            tslint: false,
-            editorconfig: false,
-            tsfmt: true
-        }).then((result) => {
-            const formattedDefinitionsContent = result.dest;
-            resolve(formattedDefinitionsContent);
-        });
-    });
-}
-
-module.exports = getFormattedReactComponentDefinitionsContent;
+module.exports = stringifyComponentDefinition;
