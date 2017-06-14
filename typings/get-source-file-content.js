@@ -1,7 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const resolve = require('resolve').sync;
 
 function getSourceFileContent(filePath, parentPath) {
+    if (parentPath) {
+        if (path.extname(parentPath)) {
+            parentPath = path.dirname(parentPath);
+        }
+        filePath = resolve(filePath, { basedir: parentPath, extensions: ['.js', '.jsx'] });
+    }
     if (fs.existsSync(`${filePath}.map`)) { // if we have file with source map, read it
         return {
             filePath,
@@ -14,24 +21,6 @@ function getSourceFileContent(filePath, parentPath) {
             content: fs.readFileSync(filePath, 'utf8')
         };
     }
-    if (parentPath) { // relative path
-        if (path.extname(parentPath)) {
-            parentPath = path.dirname(parentPath);
-        }
-        filePath = path.resolve(parentPath, `${filePath}.jsx`);
-        return {
-            filePath,
-            content: fs.readFileSync(filePath, 'utf8')
-        };
-    }
-    try {
-        filePath = require.resolve(path.resolve(path.dirname(parentPath), filePath));
-        return getSourceFileContent(filePath);
-    } catch (e) {} // eslint-disable-line no-empty
-    try {
-        filePath = require.resolve(filePath);
-        return getSourceFileContent(filePath);
-    } catch (e) {} // eslint-disable-line no-empty
 
     throw new Error(`Unable to locate file ${filePath}`);
 }

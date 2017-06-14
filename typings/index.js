@@ -8,7 +8,7 @@ function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
     return new Promise((resolve) => {
         const componentName = path.parse(filePath).name;
         try {
-            const componentInfo = getReactComponentInfo(filePath, undefined);
+            const componentInfo = getReactComponentInfo(filePath);
             const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
             formatTs(definitionsContent)
                 .then(resolve);
