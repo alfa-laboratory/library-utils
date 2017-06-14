@@ -5,7 +5,7 @@ const through = require('through2');
 const Vinyl = require('vinyl');
 const ejs = require('ejs');
 
-const TEMPLATE_COMPONENT = fs.readFileSync(path.join(__dirname, '/docs-templates/component.md.ejs'), 'utf8');
+const TEMPLATE_COMPONENT = fs.readFileSync(path.join(__dirname, '../docs-templates/component.md.ejs'), 'utf8');
 
 /**
  * Gulp plugin to render doc file from react component.

@@ -9,10 +9,10 @@ const clone = require('gulp-clone');
 const es = require('event-stream');
 const ts = require('gulp-typescript');
 const del = require('del');
-const componentPackage = require('./component-package');
-const componentTypings = require('./component-typings');
-const componentDocs = require('./component-docs');
-const libraryDoc = require('./library-doc');
+const componentPackage = require('./gulp/component-package');
+const componentTypings = require('./gulp/component-typings');
+const componentDocs = require('./gulp/component-docs');
+const libraryDoc = require('./gulp/library-doc');
 
 
 const defaultOptions = {
