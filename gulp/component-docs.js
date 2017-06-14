@@ -19,17 +19,22 @@ function componentDocs(libraryName) {
             callback();
             return;
         }
-        const content = file.contents.toString('utf8');
-        const componentName = path.parse(file.path).name;
-        const description = structureForFile(content, componentName);
-        const doc = ejs.render(TEMPLATE_COMPONENT, { component: description, libraryName });
+        try {
+            const content = file.contents.toString('utf8');
+            const componentName = path.parse(file.path).name;
+            const description = structureForFile(content, componentName);
+            const doc = ejs.render(TEMPLATE_COMPONENT, { component: description, libraryName });
 
-        callback(null, new Vinyl({
-            cwd: file.cwd,
-            base: file.base,
-            path: `${path.dirname(file.path)}/README.md`,
-            contents: new Buffer(doc)
-        }));
+            callback(null, new Vinyl({
+                cwd: file.cwd,
+                base: file.base,
+                path: `${path.dirname(file.path)}/README.md`,
+                contents: new Buffer(doc)
+            }));
+        } catch (e) {
+            console.warn(`unable to build docs for ${file.path}`);
+            callback(null);
+        }
     }
 
     return through.obj(transform);
