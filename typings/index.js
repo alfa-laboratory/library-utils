@@ -1,15 +1,16 @@
-const path = require('path');
-const getReactComponentInfo = require('./get-react-component-info');
+const getReactComponentInfo = require('../react-doc');
 const getReactComponentDefinitionsContent = require('./stringify-component-definition');
 const formatTs = require('./format-ts');
 
 
-function getFormattedReactComponentDefinitionsContent(filePath, projectName) {
+function getFormattedReactComponentDefinitionsContent(filePath) {
     return new Promise((resolve) => {
-        const componentName = path.parse(filePath).name;
         try {
             const componentInfo = getReactComponentInfo(filePath);
-            const definitionsContent = getReactComponentDefinitionsContent(componentInfo, componentName, projectName);
+            // filter public methods
+            componentInfo.methods = componentInfo.methods
+                .filter(({ docblock }) => docblock && docblock.indexOf('@public') !== -1);
+            const definitionsContent = getReactComponentDefinitionsContent(componentInfo);
             formatTs(definitionsContent)
                 .then(resolve);
         } catch (e) {
