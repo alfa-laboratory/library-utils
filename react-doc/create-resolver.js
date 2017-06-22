@@ -1,19 +1,19 @@
+const path = require('path');
 const babylon = require('react-docgen/dist/babylon').default;
+const resolve = require('resolve').sync;
 const isExportsOrModuleAssignment = require('react-docgen/dist/utils/isExportsOrModuleAssignment').default;
 const isReactComponentClass = require('react-docgen/dist/utils/isReactComponentClass').default;
 const isReactCreateClassCall = require('react-docgen/dist/utils/isReactCreateClassCall').default;
 const isStatelessComponent = require('react-docgen/dist/utils/isStatelessComponent').default;
 const normalizeClassDefinition = require('react-docgen/dist/utils/normalizeClassDefinition').default;
-const resolveExportDeclaration = require('./resolve-export-declaration');
 const resolveToValue = require('react-docgen/dist/utils/resolveToValue').default;
 const resolveHOC = require('react-docgen/dist/utils/resolveHOC').default;
+const resolveToModule = require('react-docgen/dist/utils/resolveToModule').default;
 const getSourceFileContent = require('./get-source-file-content');
+const resolveExportDeclaration = require('./docgen/resolve-export-declaration');
+const isDecoratedBy = require('./docgen/is-decorated-by');
 
 const ERROR_MULTIPLE_DEFINITIONS = 'Multiple exported component definitions found.';
-
-function ignore() {
-    return false;
-}
 
 function isComponentDefinition(path) {
     return isReactCreateClassCall(path) || isReactComponentClass(path) || isStatelessComponent(path);
@@ -26,7 +26,7 @@ function resolveDefinition(definition, types) {
         if (types.ObjectExpression.check(resolvedPath.node)) {
             return resolvedPath;
         }
-    } else if (isReactComponentClass(definition)) {
+    } else if (isReactComponentClass(definition) || isDecoratedBy(definition, 'cn')) {
         normalizeClassDefinition(definition);
         return definition;
     } else if (isStatelessComponent(definition)) {
@@ -35,12 +35,9 @@ function resolveDefinition(definition, types) {
     return null;
 }
 
-function findExportedComponentDefinition(
-    ast,
-    recast,
-    filePath
-) {
+function findExportedComponentDefinition(ast, recast, filePath) {
     const types = recast.types.namedTypes;
+    const importedModules = {};
     let definition;
 
     function exportDeclaration(nodePath) {
@@ -49,16 +46,26 @@ function findExportedComponentDefinition(
             .reduce((acc, def) => {
                 if (isComponentDefinition(def)) {
                     acc.push(def);
-                } else {
-                    const resolved = resolveToValue(resolveHOC(def));
-                    if (isComponentDefinition(resolved)) {
-                        acc.push(resolved);
-                        return acc;
-                    }
+                    return acc;
+                }
+
+                const resolved = resolveToValue(resolveHOC(def));
+                if (isComponentDefinition(resolved)) {
+                    acc.push(resolved);
+                    return acc;
+                }
+
+                if (isDecoratedBy(def, 'cn') && def.get('superClass')) {
+                    const superClass = def.get('superClass');
+                    const src = getSourceFileContent(importedModules[superClass.value.name], filePath);
+                    filePath = src.filePath; // update file path, so we can correctly resolve imports
+                    linkedFile = recast.parse(src.content, { esprima: babylon });
+                    return acc;
                 }
                 if (def.get('value') && def.get('value').value) {
                     // if we found reexported file - parse it with recast and return
                     const src = getSourceFileContent(def.get('value').value, filePath);
+                    filePath = src.filePath; // update file path, so we can correctly resolve imports
                     linkedFile = recast.parse(src.content, { esprima: babylon });
                 }
                 return acc;
@@ -80,23 +87,27 @@ function findExportedComponentDefinition(
     }
 
     recast.visit(ast, {
-        visitFunctionDeclaration: ignore,
-        visitFunctionExpression: ignore,
-        visitClassDeclaration: ignore,
-        visitClassExpression: ignore,
-        visitIfStatement: ignore,
-        visitWithStatement: ignore,
-        visitSwitchStatement: ignore,
-        visitCatchCause: ignore,
-        visitWhileStatement: ignore,
-        visitDoWhileStatement: ignore,
-        visitForStatement: ignore,
-        visitForInStatement: ignore,
-
         visitExportDeclaration: exportDeclaration,
         visitExportNamedDeclaration: exportDeclaration,
         visitExportDefaultDeclaration: exportDeclaration,
+        visitImportDeclaration(node) {
+            const specifiers = node.value.specifiers;
+            const moduleName = resolveToModule(node);
 
+            if (moduleName !== 'react' && moduleName !== 'prop-types') {
+                // resolve path to file here, because this is the only place where we've got actual source path
+                // but skip `react` and `prop-types` modules, because dockgen winn not be able to detect types otherwise
+                node.value.source.value = resolve(
+                    node.value.source.value,
+                    { basedir: path.dirname(filePath), extensions: ['.js', '.jsx'] }
+                );
+            }
+
+            if (specifiers && specifiers.length > 0) {
+                importedModules[specifiers[0].local.name] = node.value.source.value;
+            }
+            return false;
+        },
         visitAssignmentExpression(path) {
             // Ignore anything that is not `exports.X = ...;` or
             // `module.exports = ...;`

@@ -73,7 +73,7 @@ function createTasks(packageName, options = {}) {
 
         const typingFiles = components
             .pipe(clone())
-            .pipe(componentTypings(packageName));
+            .pipe(componentTypings());
 
         return es
             .merge(packages, typingFiles)

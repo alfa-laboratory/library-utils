@@ -9,14 +9,14 @@ const getReactComponentDefinitionsContent = require('../typings/index');
  * @param {String} libraryName Library name, will be used in typescript declarations.
  * @returns {Function}
  */
-function componentTypings(libraryName) {
+function componentTypings() {
     function transform(file, encoding, callback) {
         if (file.isStream()) {
             callback();
             return;
         }
         const componentName = path.parse(file.path).name;
-        getReactComponentDefinitionsContent(file.path, libraryName).then((definitionsContent) => {
+        getReactComponentDefinitionsContent(file.path).then((definitionsContent) => {
             if (!definitionsContent) {
                 console.warn(`Unable to create typings for ${file.path}`);
                 return callback(null);
