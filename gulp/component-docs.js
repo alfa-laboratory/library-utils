@@ -32,7 +32,7 @@ function componentDocs(libraryName) {
                 contents: new Buffer(doc)
             }));
         } catch (e) {
-            console.warn(`unable to build docs for ${file.path}`);
+            console.warn(`unable to build docs for ${file.path}`); // eslint-disable-line no-console
             callback(null);
         }
     }

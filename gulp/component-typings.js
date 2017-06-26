@@ -18,7 +18,7 @@ function componentTypings() {
         const componentName = path.parse(file.path).name;
         getReactComponentDefinitionsContent(file.path).then((definitionsContent) => {
             if (!definitionsContent) {
-                console.warn(`Unable to create typings for ${file.path}`);
+                console.warn(`Unable to create typings for ${file.path}`); // eslint-disable-line no-console
                 return callback(null);
             }
             return callback(null, new Vinyl({
@@ -28,7 +28,7 @@ function componentTypings() {
                 contents: new Buffer(definitionsContent)
             }));
         }).catch((e) => {
-            console.error(e);
+            console.error(e); // eslint-disable-line no-console
         });
     }
 
