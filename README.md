@@ -144,6 +144,31 @@ gulp.src('src/*.js')
     .pipe(gulp.dest('docs');
 ```
 
+
+Использование styleguidist
+==========================
+
+Для легкого создания демо/документации ваших компонентов вы можете использовать [styleguidist](https://github.com/styleguidist/react-styleguidist).
+Эта библиотека содержит базовую конфигурацию styleguidist, для того чтобы добавить его в ваш проект
+создайте файл `styleguide.config.js` в корне вашего проекта.
+
+```
+const baseConfig = require('library-utils/styleguidist/config');
+
+module.exports = Object.assign({}, baseConfig, {
+    title: 'ARUI FEATHER', // title страницы с демо
+    styleguideDir: path.resolve(__dirname, './styleguide/'), // папка, в которую будет попадать статика при запуске styleguidist build
+    serverPort: 3030, // Порт, на котором будет слушать styleguidist
+    components: 'src/**/**/[a-z]*.jsx' // маска для поиска компонентов
+});
+```
+
+Ваш `package.json`:
+```
+"demo": "styleguidist server",
+"build-demo": "styleguidist build",
+```
+
 Лицензия
 --------
 
