@@ -6,6 +6,7 @@ const isReactComponentClass = require('react-docgen/dist/utils/isReactComponentC
 const isReactCreateClassCall = require('react-docgen/dist/utils/isReactCreateClassCall').default;
 const isStatelessComponent = require('react-docgen/dist/utils/isStatelessComponent').default;
 const normalizeClassDefinition = require('react-docgen/dist/utils/normalizeClassDefinition').default;
+const getMemberValuePath = require('react-docgen/dist/utils/getMemberValuePath').default;
 const resolveToValue = require('react-docgen/dist/utils/resolveToValue').default;
 const resolveHOC = require('react-docgen/dist/utils/resolveHOC').default;
 const resolveToModule = require('react-docgen/dist/utils/resolveToModule').default;
@@ -38,6 +39,7 @@ function resolveDefinition(definition, types) {
 function findExportedComponentDefinition(ast, recast, filePath) {
     const types = recast.types.namedTypes;
     const importedModules = {};
+    let originalClassName;
     let definition;
 
     function exportDeclaration(nodePath) {
@@ -57,6 +59,10 @@ function findExportedComponentDefinition(ast, recast, filePath) {
 
                 if (isDecoratedBy(def, 'cn') && def.get('superClass')) {
                     const superClass = def.get('superClass');
+                    if (!originalClassName) { // save original component name and use it to patch parent class
+                        originalClassName = def.get('id').value.name;
+                    }
+
                     const src = getSourceFileContent(importedModules[superClass.value.name], filePath);
                     filePath = src.filePath; // update file path, so we can correctly resolve imports
                     linkedFile = recast.parse(src.content, { esprima: babylon });
@@ -90,6 +96,25 @@ function findExportedComponentDefinition(ast, recast, filePath) {
         visitExportDeclaration: exportDeclaration,
         visitExportNamedDeclaration: exportDeclaration,
         visitExportDefaultDeclaration: exportDeclaration,
+        visitClassDeclaration(node) {
+            if (originalClassName) {
+                // we inside super class, so we create `displayName` static property that handlers can read
+                // and override original class display name
+                let originalPath = getMemberValuePath(node, 'displayName');
+                if (originalPath) { // replace existing displayName
+                    originalPath.value = recast.types.builders.literal(originalClassName);
+                } else { // create new property
+                    const propertyDefinition = recast.types.builders.classProperty(
+                        recast.types.builders.identifier('displayName'),
+                        recast.types.builders.literal(originalClassName),
+                        null,
+                        true
+                    );
+                    node.get('body').value.body.push(propertyDefinition);
+                }
+            }
+            return false;
+        },
         visitImportDeclaration(node) {
             const specifiers = node.value.specifiers;
             const moduleName = resolveToModule(node);
