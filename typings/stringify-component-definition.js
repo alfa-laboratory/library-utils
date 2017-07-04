@@ -62,9 +62,10 @@ function stringifyDescription(description, docblock) {
 }
 
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
+    const typeDescription = stringifyType(type, componentName, `${propName}${fieldName}`, typeRefs);
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
-        `${fieldName}${type.required ? '' : '?'}: ${stringifyType(type, componentName, propName, typeRefs)}`
+        `${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
     );
 }
 
