@@ -1,6 +1,6 @@
 {
   "name": "library-utils",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "main": "index.js",
   "description": "Utils for component libraries processing and compilation",
   "repository": {
