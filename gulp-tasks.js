@@ -25,7 +25,7 @@ const defaultOptions = {
     tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*-test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
     cssCopyGlob: ['src/**/vars/**/*.css', 'src/vars*.css'],
-    resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,json}'],
+    resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,woff,json}'],
     publishFilesGlob: ['package.json', '*.md', 'LICENSE']
 };
 
