@@ -121,7 +121,7 @@ function findExportedComponentDefinition(ast, recast, filePath) {
 
             if (moduleName !== 'react' && moduleName !== 'prop-types') {
                 // resolve path to file here, because this is the only place where we've got actual source path
-                // but skip `react` and `prop-types` modules, because dockgen winn not be able to detect types otherwise
+                // but skip `react` and `prop-types` modules, because docgen will not be able to detect types otherwise
                 node.value.source.value = resolve(
                     node.value.source.value,
                     { basedir: path.dirname(filePath), extensions: ['.js', '.jsx'] }
