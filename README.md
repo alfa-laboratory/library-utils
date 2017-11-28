@@ -1,6 +1,23 @@
 Набор утилит для компиляции и генерации доков для react компонентов
 ===================================================================
 
+[![npm][npm-img]][npm]
+[![license][license-img]][license]
+[![travis][travis-img]][travis]
+[![appveyor][appveyor-img]][appveyor]
+[![greenkeeper][greenkeeper-img]][greenkeeper]
+
+[appveyor]:        https://ci.appveyor.com/project/teryaew/library-utils
+[appveyor-img]:    https://img.shields.io/appveyor/ci/teryaew/library-utils/master.svg?label=win
+[greenkeeper]:     https://greenkeeper.io
+[greenkeeper-img]: https://badges.greenkeeper.io/alfa-laboratory/library-utils.svg
+[license]:         https://opensource.org/licenses/MIT
+[license-img]:     https://img.shields.io/badge/License-MIT-brightgreen.svg
+[npm-img]:         https://img.shields.io/npm/v/library-utils.svg
+[npm]:             https://www.npmjs.org/package/library-utils
+[travis]:          https://travis-ci.org/alfa-laboratory/library-utils?branch=master
+[travis-img]:      https://img.shields.io/travis/alfa-laboratory/library-utils/master.svg?label=unix
+
 gulpfile
 --------
 Готовый gulpfile со всеми настройками, необходимыми для сборки библиотеки
