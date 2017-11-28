@@ -36,9 +36,9 @@ function stringifyType(type, componentName, propName, typeRefs) {
             return 'any';
         default:
             return 'any' +
-                `/* Не нашелся встроенный тип для типа ${JSON.stringify(type)}
-                 * https://github.com/alfa-laboratory/library-utils/issues/new 
-                 */`;
+                `/* Не нашёлся встроенный тип для типа ${JSON.stringify(type)}
+                  * https://github.com/alfa-laboratory/library-utils/issues/new
+                  */`;
     }
 }
 
@@ -71,12 +71,14 @@ function stringifyField(fieldName, type, componentName, propName, typeRefs) {
 
 function stringifyShape(type, componentName, propName, typeRefs) {
     const fields = type.value;
+    /* eslint-disable indent */
     return `{
         ${Object
             .keys(fields)
             .map(fieldName => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
             .join(';\n')}
     }`;
+    /* eslint-enable indent */
 }
 
 function stringifyObjectOf(type, componentName, propName, typeRefs) {
@@ -95,6 +97,7 @@ function stringifyComponentDefinition(info) {
     const typeRefs = []; // PropType fields typedefs
     const propsInterfaceName = `${info.displayName}Props`;
     const propsDef = (
+        /* eslint-disable indent */
         `
         export interface ${propsInterfaceName} {
             ${Object.keys(info.props).map((propName) => {
@@ -106,13 +109,12 @@ function stringifyComponentDefinition(info) {
             }).join('')}
         }
         `
+        /* eslint-enable indent */
     );
     return (
         `
         import { Component, ReactNode } from 'react';
-        
         ${typeRefs.join('\n')}
-        
         ${propsDef}
 
         ${stringifyDescription(info.description, info.docblock)}
