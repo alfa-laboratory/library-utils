@@ -114,7 +114,9 @@ function stringifyComponentDefinition(info) {
     return (
         `
         import { Component, ReactNode } from 'react';
+
         ${typeRefs.join('\n')}
+
         ${propsDef}
 
         ${stringifyDescription(info.description, info.docblock)}
