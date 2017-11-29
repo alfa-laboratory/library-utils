@@ -36,7 +36,7 @@ function componentPackage() {
             cwd: file.cwd,
             base: file.base,
             path: path.join(dirname, 'package.json'),
-            contents: new Buffer(getComponentPackage(file))
+            contents: Buffer.from(getComponentPackage(file))
         }));
     }
 

@@ -29,7 +29,7 @@ function componentDocs(libraryName) {
                 cwd: file.cwd,
                 base: file.base,
                 path: `${path.dirname(file.path)}/README.md`,
-                contents: new Buffer(doc)
+                contents: Buffer.from(doc)
             }));
         } catch (e) {
             console.warn(`unable to build docs for ${file.path}`);

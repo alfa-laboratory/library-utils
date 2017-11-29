@@ -88,7 +88,7 @@ function stringifyObjectOf(type, componentName, propName, typeRefs) {
     }`;
 }
 
-function stringifyMethod({ name, docblock, params, description }) {
+function stringifyMethod({ name, docblock, params, description }) { // eslint-disable-line object-curly-newline
     return stringifyDescription(description, docblock) + // eslint-disable-line prefer-template
         `${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`;
 }
@@ -97,19 +97,17 @@ function stringifyComponentDefinition(info) {
     const typeRefs = []; // PropType fields typedefs
     const propsInterfaceName = `${info.displayName}Props`;
     const propsDef = (
-        /* eslint-disable indent */
+        /* eslint-disable indent, object-curly-newline */
         `
         export interface ${propsInterfaceName} {
             ${Object.keys(info.props).map((propName) => {
                 const { required, type, description, docblock } = info.props[propName];
                 const typeDef = stringifyType(type, info.displayName, propName, typeRefs);
-                return (
-                    `${stringifyDescription(description, docblock)}${propName}${required ? '' : '?'}: ${typeDef};`
-                );
+                return `${stringifyDescription(description, docblock)}${propName}${required ? '' : '?'}: ${typeDef};`;
             }).join('')}
         }
         `
-        /* eslint-enable indent */
+        /* eslint-enable indent, object-curly-newline */
     );
     return (
         `
