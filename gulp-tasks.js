@@ -39,11 +39,13 @@ function createTasks(packageName, options = {}) {
     gulp.task('clean', () => del([options.publishDir]));
     gulp.task('clean:docs', () => del([options.publishDir]));
 
-    gulp.task('js', ['clean'], () => gulp.src(options.jsGlob)
-        .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'js', ['clean'],
+        () => gulp.src(options.jsGlob)
+            .pipe(sourcemaps.init())
+            .pipe(babel())
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest(options.publishDir))
     );
 
     gulp.task('ts:compile', ['clean'], () => {
@@ -58,9 +60,11 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.publishDir));
     });
 
-    gulp.task('ts:packages', ['clean'], () => gulp.src(options.tsComponentsGlob)
-        .pipe(componentPackage())
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'ts:packages', ['clean'],
+        () => gulp.src(options.tsComponentsGlob)
+            .pipe(componentPackage())
+            .pipe(gulp.dest(options.publishDir))
     );
 
     gulp.task('ts', ['ts:compile', 'ts:packages']);
@@ -80,25 +84,33 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.publishDir));
     });
 
-    gulp.task('css:compile', ['clean'], () => gulp.src(options.cssGlob)
-        .pipe(sourcemaps.init())
-        .pipe(postcss())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'css:compile', ['clean'],
+        () => gulp.src(options.cssGlob)
+            .pipe(sourcemaps.init())
+            .pipe(postcss())
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest(options.publishDir))
     );
 
-    gulp.task('css:copy', ['clean'], () => gulp.src(options.cssCopyGlob)
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'css:copy', ['clean'],
+        () => gulp.src(options.cssCopyGlob)
+            .pipe(gulp.dest(options.publishDir))
     );
 
     gulp.task('css', ['css:copy', 'css:compile']);
 
-    gulp.task('resources', ['clean'], () => gulp.src(options.resourcesGlob)
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'resources', ['clean'],
+        () => gulp.src(options.resourcesGlob)
+            .pipe(gulp.dest(options.publishDir))
     );
 
-    gulp.task('publish-files', ['clean'], () => gulp.src(options.publishFilesGlob)
-        .pipe(gulp.dest(options.publishDir))
+    gulp.task(
+        'publish-files', ['clean'],
+        () => gulp.src(options.publishFilesGlob)
+            .pipe(gulp.dest(options.publishDir))
     );
 
     gulp.task('docs', ['clean:docs'], () => {
@@ -128,9 +140,7 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.docsDir));
     });
 
-    gulp.task('compile',
-        ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : [])
-    );
+    gulp.task('compile', ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : []));
 }
 
 module.exports = createTasks;

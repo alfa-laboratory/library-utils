@@ -25,7 +25,7 @@ function componentTypings() {
                 cwd: file.cwd,
                 base: file.base,
                 path: path.join(path.dirname(file.path), `${componentName}.d.ts`),
-                contents: new Buffer(definitionsContent)
+                contents: Buffer.from(definitionsContent)
             }));
         }).catch((e) => {
             console.error(e);

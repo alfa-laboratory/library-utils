@@ -47,7 +47,7 @@ function libraryDoc(libraryName) {
         const content = ejs.render(TEMPLATE_INDEX, { components, libraryName });
         this.push(new Vinyl({
             path: latestFile.path,
-            contents: new Buffer(content)
+            contents: Buffer.from(content)
         }));
 
         callback();
