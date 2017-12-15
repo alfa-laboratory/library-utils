@@ -11,7 +11,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
         case 'bool':
             return 'boolean';
         case 'array':
-            return 'Array<any>';
+            return 'any[]';
         case 'node':
             return 'ReactNode';
         case 'union':
@@ -28,7 +28,12 @@ function stringifyType(type, componentName, propName, typeRefs) {
             typeRefs.push(`export type ${typeName} = ${stringifyShape(type, componentName, propName, typeRefs)};`);
             return typeName;
         case 'objectOf':
-            typeRefs.push(`export type ${typeName} = ${stringifyObjectOf(type, componentName, propName, typeRefs)};`);
+            typeRefs.push(`export type ${typeName} = ${stringifyObjectOf(
+                type,
+                componentName,
+                `${propName}Value`,
+                typeRefs
+            )};`);
             return typeName;
         case 'object':
             return 'object';
@@ -43,7 +48,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
 }
 
 function stringifyArray(type, componentName, propName, typeRefs) {
-    return `Array<${stringifyType(type.value, componentName, propName, typeRefs)}>`;
+    return `${stringifyType(type.value, componentName, propName, typeRefs)}[]`;
 }
 
 function stringifyEnum(type) {
@@ -62,7 +67,7 @@ function stringifyDescription(description, docblock) {
 }
 
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
-    const typeDescription = stringifyType(type, componentName, `${propName}${fieldName}`, typeRefs);
+    const typeDescription = stringifyType(type, componentName, `${propName}${upperCamelCase(fieldName)}`, typeRefs);
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
         `${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
