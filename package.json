@@ -14,7 +14,7 @@
     "event-stream": "3.3.4",
     "gulp": "3.9.1",
     "gulp-babel": "7.0.0",
-    "gulp-clone": "1.1.1",
+    "gulp-clone": "1.1.2",
     "gulp-postcss": "7.0.1",
     "gulp-rename": "1.2.2",
     "gulp-sourcemaps": "2.6.3",
