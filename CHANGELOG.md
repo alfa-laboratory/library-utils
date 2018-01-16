@@ -1,3 +1,13 @@
+<a name="1.7.4"></a>
+## [1.7.4](https://github.com/alfa-laboratory/library-utils/compare/v1.7.3...v1.7.4) (2018-01-16)
+
+
+### Bug Fixes
+
+* **package:** update react-component-info to version 1.1.2 ([9fdfc65](https://github.com/alfa-laboratory/library-utils/commit/9fdfc65))
+
+
+
 <a name="1.7.3"></a>
 ## [1.7.3](https://github.com/alfa-laboratory/library-utils/compare/v1.7.2...v1.7.3) (2018-01-14)
 
