@@ -18,7 +18,7 @@
     "gulp-postcss": "7.0.1",
     "gulp-rename": "1.2.2",
     "gulp-sourcemaps": "2.6.3",
-    "gulp-typescript": "3.2.3",
+    "gulp-typescript": "4.0.1",
     "react-component-info": "1.1.2",
     "react-docgen": "3.0.0-beta8",
     "react-docgen-displayname-handler": "1.0.1",
