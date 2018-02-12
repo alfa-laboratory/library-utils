@@ -1,3 +1,16 @@
+<a name="1.8.1"></a>
+## [1.8.1](https://github.com/alfa-laboratory/library-utils/compare/v1.8.0...v1.8.1) (2018-02-12)
+
+
+### Bug Fixes
+
+* **package:** update gulp-babel to version 7.0.1 ([#45](https://github.com/alfa-laboratory/library-utils/issues/45)) ([37dc8cf](https://github.com/alfa-laboratory/library-utils/commit/37dc8cf))
+* **package:** update gulp-clone to version 2.0.1 ([#51](https://github.com/alfa-laboratory/library-utils/issues/51)) ([09f0430](https://github.com/alfa-laboratory/library-utils/commit/09f0430)), closes [#39](https://github.com/alfa-laboratory/library-utils/issues/39)
+* **package:** update gulp-sourcemaps to version 2.6.4 ([#43](https://github.com/alfa-laboratory/library-utils/issues/43)) ([4e7a0c5](https://github.com/alfa-laboratory/library-utils/commit/4e7a0c5))
+* **package:** update gulp-typescript to version 4.0.1 ([#52](https://github.com/alfa-laboratory/library-utils/issues/52)) ([fcb9fbd](https://github.com/alfa-laboratory/library-utils/commit/fcb9fbd)), closes [#44](https://github.com/alfa-laboratory/library-utils/issues/44)
+
+
+
 <a name="1.8.0"></a>
 # [1.8.0](https://github.com/alfa-laboratory/library-utils/compare/v1.7.4...v1.8.0) (2018-02-12)
 
