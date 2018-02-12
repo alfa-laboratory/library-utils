@@ -33,6 +33,7 @@ function componentDocs(libraryName) {
             }));
         } catch (e) {
             console.warn(`unable to build docs for ${file.path}`);
+            console.warn(e);
             callback(null);
         }
     }

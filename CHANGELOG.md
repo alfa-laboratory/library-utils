@@ -1,3 +1,18 @@
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/alfa-laboratory/library-utils/compare/v1.7.4...v1.8.0) (2018-02-12)
+
+
+### Bug Fixes
+
+* **package:** update recast to version 0.13.1 ([#47](https://github.com/alfa-laboratory/library-utils/issues/47)) ([0bb392c](https://github.com/alfa-laboratory/library-utils/commit/0bb392c))
+
+
+### Features
+
+* **component-docs:** add console warning with error object ([#41](https://github.com/alfa-laboratory/library-utils/issues/41)) ([f7b6249](https://github.com/alfa-laboratory/library-utils/commit/f7b6249))
+
+
+
 <a name="1.7.4"></a>
 ## [1.7.4](https://github.com/alfa-laboratory/library-utils/compare/v1.7.3...v1.7.4) (2018-01-16)
 
