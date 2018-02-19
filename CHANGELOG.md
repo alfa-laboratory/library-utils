@@ -1,3 +1,13 @@
+<a name="1.8.2"></a>
+## [1.8.2](https://github.com/alfa-laboratory/library-utils/compare/v1.8.1...v1.8.2) (2018-02-19)
+
+
+### Bug Fixes
+
+* **package:** update recast to version 0.13.2 ([#58](https://github.com/alfa-laboratory/library-utils/issues/58)) ([8ad45e4](https://github.com/alfa-laboratory/library-utils/commit/8ad45e4))
+
+
+
 <a name="1.8.1"></a>
 ## [1.8.1](https://github.com/alfa-laboratory/library-utils/compare/v1.8.0...v1.8.1) (2018-02-12)
 
