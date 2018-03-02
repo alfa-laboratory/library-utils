@@ -48,7 +48,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
 }
 
 function stringifyArray(type, componentName, propName, typeRefs) {
-    return `${stringifyType(type.value, componentName, propName, typeRefs)}[]`;
+    return `Array<${stringifyType(type.value, componentName, propName, typeRefs)}>`;
 }
 
 function stringifyEnum(type) {
