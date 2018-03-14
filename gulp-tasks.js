@@ -29,6 +29,17 @@ const defaultOptions = {
     publishFilesGlob: ['package.json', '*.md', 'LICENSE']
 };
 
+const errors = [];
+
+function handleError(error) {
+    errors.push(error);
+}
+
+function checkErrors() {
+    if (errors.length > 0) {
+        process.exit(1);
+    }
+}
 
 function createTasks(packageName, options = {}) {
     options = Object.assign({}, defaultOptions, options);
@@ -52,12 +63,14 @@ function createTasks(packageName, options = {}) {
         const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
         const tsResult = gulp.src(options.tsGlob)
             .pipe(sourcemaps.init())
-            .pipe(tsProject());
+            .pipe(tsProject())
+            .on('error', handleError);
 
         return es
             .merge(tsResult.js, tsResult.dts)
             .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest(options.publishDir));
+            .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError);
     });
 
     gulp.task(
@@ -65,6 +78,7 @@ function createTasks(packageName, options = {}) {
         () => gulp.src(options.tsComponentsGlob)
             .pipe(componentPackage())
             .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError)
     );
 
     gulp.task('ts', ['ts:compile', 'ts:packages']);
@@ -73,15 +87,18 @@ function createTasks(packageName, options = {}) {
         const components = gulp.src(options.componentsGlob);
         const packages = components
             .pipe(clone())
-            .pipe(componentPackage());
+            .pipe(componentPackage())
+            .on('error', handleError);
 
         const typingFiles = components
             .pipe(clone())
-            .pipe(componentTypings());
+            .pipe(componentTypings())
+            .on('error', handleError);
 
         return es
             .merge(packages, typingFiles)
-            .pipe(gulp.dest(options.publishDir));
+            .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError);
     });
 
     gulp.task(
@@ -91,12 +108,14 @@ function createTasks(packageName, options = {}) {
             .pipe(postcss())
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError)
     );
 
     gulp.task(
         'css:copy', ['clean'],
         () => gulp.src(options.cssCopyGlob)
             .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError)
     );
 
     gulp.task('css', ['css:copy', 'css:compile']);
@@ -105,12 +124,14 @@ function createTasks(packageName, options = {}) {
         'resources', ['clean'],
         () => gulp.src(options.resourcesGlob)
             .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError)
     );
 
     gulp.task(
         'publish-files', ['clean'],
         () => gulp.src(options.publishFilesGlob)
             .pipe(gulp.dest(options.publishDir))
+            .on('error', handleError)
     );
 
     gulp.task('docs', ['clean:docs'], () => {
@@ -140,7 +161,11 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.docsDir));
     });
 
-    gulp.task('compile', ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : []));
+    gulp.task(
+        'compile',
+        ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : []),
+        checkErrors
+    );
 }
 
 module.exports = createTasks;
