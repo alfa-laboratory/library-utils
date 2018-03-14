@@ -1,3 +1,20 @@
+<a name="1.9.0"></a>
+# [1.9.0](https://github.com/alfa-laboratory/library-utils/compare/v1.8.2...v1.9.0) (2018-03-14)
+
+
+### Bug Fixes
+
+* fix array typings ([dfc4bd6](https://github.com/alfa-laboratory/library-utils/commit/dfc4bd6))
+* **package:** update recast to version 0.14.0 ([#62](https://github.com/alfa-laboratory/library-utils/issues/62)) ([59d2dd1](https://github.com/alfa-laboratory/library-utils/commit/59d2dd1))
+* **package:** update typescript-formatter to version 7.1.0 ([#60](https://github.com/alfa-laboratory/library-utils/issues/60)) ([178c5be](https://github.com/alfa-laboratory/library-utils/commit/178c5be))
+
+
+### Features
+
+* **gulpfile:** exit with code 1 on errors during build ([8369e80](https://github.com/alfa-laboratory/library-utils/commit/8369e80))
+
+
+
 <a name="1.8.2"></a>
 ## [1.8.2](https://github.com/alfa-laboratory/library-utils/compare/v1.8.1...v1.8.2) (2018-02-19)
 
