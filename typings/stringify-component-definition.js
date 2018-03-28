@@ -95,12 +95,13 @@ function stringifyObjectOf(type, componentName, propName, typeRefs) {
 
 function stringifyMethod({ name, docblock, params, description }) { // eslint-disable-line object-curly-newline
     return stringifyDescription(description, docblock) + // eslint-disable-line prefer-template
-        `${name}(${params.map(({ name }) => `${name}: any`).join(',')}): any;`;
+        `${name}(${params.map(({ name }) => `${name}?: any`).join(',')}): any;`;
 }
 
 function stringifyComponentDefinition(info) {
     const typeRefs = []; // PropType fields typedefs
     const propsInterfaceName = `${info.displayName}Props`;
+    const propTypesTypeName = `${info.displayName}PropTypes`;
     const propsDef = (
         /* eslint-disable indent, object-curly-newline */
         `
@@ -117,13 +118,17 @@ function stringifyComponentDefinition(info) {
     return (
         `
         import { Component, ReactNode } from 'react';
+        import * as Type from 'prop-types';
 
         ${typeRefs.join('\n')}
 
         ${propsDef}
+        
+        export type ${propTypesTypeName} = Record<keyof ${propsInterfaceName}, Type.Validator<${propsInterfaceName}>>;
 
         ${stringifyDescription(info.description, info.docblock)}
         export default class ${info.displayName} extends Component<${propsInterfaceName}, any> {
+            static propTypes: ${propTypesTypeName};
             ${info.methods.map(stringifyMethod).join('')}
         }
         `
