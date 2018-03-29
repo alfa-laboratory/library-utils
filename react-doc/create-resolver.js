@@ -124,7 +124,7 @@ function findExportedComponentDefinition(ast, recast, filePath) {
                 // but skip `react` and `prop-types` modules, because docgen will not be able to detect types otherwise
                 node.value.source.value = resolve(
                     node.value.source.value,
-                    { basedir: path.dirname(filePath), extensions: ['.js', '.jsx'] }
+                    { basedir: path.dirname(filePath), extensions: ['.js', '.jsx', '.ts', '.tsx'] }
                 );
             }
 
