@@ -1,3 +1,18 @@
+<a name="1.9.1"></a>
+## [1.9.1](https://github.com/alfa-laboratory/library-utils/compare/v1.9.0...v1.9.1) (2018-03-30)
+
+
+### Bug Fixes
+
+* **component-typings:** add proptypes types, mark all methods params as optional ([dcc0688](https://github.com/alfa-laboratory/library-utils/commit/dcc0688))
+
+
+### Features
+
+* **react-doc:** allow to import ts files ([926ecc6](https://github.com/alfa-laboratory/library-utils/commit/926ecc6))
+
+
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/alfa-laboratory/library-utils/compare/v1.8.2...v1.9.0) (2018-03-14)
 
