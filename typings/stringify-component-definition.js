@@ -4,14 +4,24 @@ const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
 function stringifyType(type, componentName, propName, description, typeRefs) {
     const typeName = `${componentName}${upperCamelCase(propName)}FieldType`;
+
+    if (typeof type === 'string' || !type) {
+        type = { name: type };
+    }
+
     switch (type.name) {
         case 'string':
+        case 'String':
             return 'string';
         case 'number':
+        case 'Number':
             return 'number';
         case 'bool':
+        case 'boolean':
+        case 'Boolean':
             return 'boolean';
         case 'array':
+        case 'Array':
             return 'ReadonlyArray<any>';
         case 'node':
             return 'ReactNode';
@@ -19,7 +29,7 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
             typeRefs.push(`export type ${typeName} = ${stringifyUnion(type, componentName, propName, typeRefs)};`);
             return typeName;
         case 'func':
-            return stringifyFunc(type, componentName, propName, description);
+            return stringifyFunc(type, componentName, propName, description, typeRefs);
         case 'enum':
             typeRefs.push(`export type ${typeName} = ${stringifyEnum(type)};`);
             return typeName;
@@ -40,6 +50,11 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
             return 'object';
         case 'any':
             return 'any';
+        case 'Event':
+        case 'HTMLElement':
+        case 'Date':
+        case 'File':
+            return type.name;
         default:
             return 'any' +
                 `/* Не нашёлся встроенный тип для типа ${JSON.stringify(type)}
@@ -67,29 +82,39 @@ function stringifyDescription(description, docblock) {
      */\n`;
 }
 
-function stringifyFunc(type, componentName, propName, description) {
+function stringifyFunc(type, componentName, propName, description, typeRefs) {
+    if (!description) {
+        return 'Function';
+    }
     try {
-        if (!description) {
-            return 'Function';
-        }
         const parsedDoc = parseJsDoc(description);
-        if (!parsedDoc || (parsedDoc.params.length === 0 && parsedDoc.returns === null)) {
-            return 'Function';
-        }
 
-        const paramsTypes = parsedDoc.params
-            .map(p => `${p.name}?: any /*${p.type ? p.type.name : 'any'}*/`);
-
-        const returnType = parsedDoc.returns
-            ? parsedDoc.returns.type.name
-            : 'void';
-
-        return `(${paramsTypes.join(', ')}) => any /*${returnType}*/`;
+        return stringifyFunctionDefinition(parsedDoc, componentName, propName, description, typeRefs, true);
     } catch (e) {
         // eslint-disable-next-line no-console
         console.warn(`Unable to parse doc block for ${componentName}.${propName}`);
         return 'Function';
     }
+}
+
+function stringifyFunctionDefinition(type, componentName, propName, description, typeRefs, useArrowNotation = false) {
+    if (!type || (type.params.length === 0 && type.returns === null)) {
+        return useArrowNotation ? 'Function' : '(...args: any[]): any';
+    }
+
+    const paramsTypes = type.params
+        .map((p) => {
+            const type = p.type
+                ? stringifyType(p.type, componentName, `${propName}${upperCamelCase(p.name)}Param`, null, typeRefs)
+                : 'any';
+            return `${p.name}?: ${type}`;
+        });
+
+    const returnType = type.returns
+        ? stringifyType(type.returns.type || type.returns, componentName, `${propName}Return`, null, typeRefs)
+        : 'void';
+
+    return `(${paramsTypes.join(', ')}) ${useArrowNotation ? '=>' : ':'} ${returnType}`;
 }
 
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
@@ -121,9 +146,11 @@ function stringifyObjectOf(type, componentName, propName, typeRefs) {
     }`;
 }
 
-function stringifyMethod({ name, docblock, params, description }) { // eslint-disable-line object-curly-newline
-    return stringifyDescription(description, docblock) + // eslint-disable-line prefer-template
-        `${name}(${params.map(({ name }) => `${name}?: any`).join(',')}): any;`;
+function stringifyClassMethod(type, componentName, typeRefs) {
+    const typeDef = stringifyFunctionDefinition(type, componentName, type.name, null, typeRefs, false);
+    const description = stringifyDescription(type.description, type.docblock);
+
+    return `${description}${type.name}${typeDef};`;
 }
 
 function stringifyComponentDefinition(info) {
@@ -145,6 +172,10 @@ function stringifyComponentDefinition(info) {
         `
         /* eslint-enable indent, object-curly-newline */
     );
+
+    const methodsDefs = info.methods
+        .map(type => stringifyClassMethod(type, info.displayName, typeRefs));
+
     return (
         `
         import { Component, ReactNode } from 'react';
@@ -159,7 +190,7 @@ function stringifyComponentDefinition(info) {
         ${stringifyDescription(info.description, info.docblock)}
         export default class ${info.displayName} extends Component<${propsInterfaceName}> {
             static propTypes: ${propTypesTypeName};
-            ${info.methods.map(stringifyMethod).join('')}
+            ${methodsDefs.join('\n')}
         }
         `
     );
