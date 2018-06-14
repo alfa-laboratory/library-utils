@@ -57,6 +57,7 @@ createTasks('arui-feather');
   * `tsComponentsGlob` - glob для файлов ts компонентов
   * `jsGlob` - glob для всех публикуемых js файлов пакета
   * `tsGlob` - glob для всех публикуемых ts файлов пакета
+  * `autoDtsGlob` - glob для js файлов, для которых будет создаваться d.ts
   * `cssGlob` - glob для всех публикуемых css файлов пакета
   * `cssCopyGlob` - glob для всех копируемых css фалов пакета
   * `resourcesGlob` - glob для всех ресурсных файлов пакета (картинки, шрифты)
@@ -82,7 +83,7 @@ const componentPackage = require('library-utils/gulp/component-package');
 
 gulp.src('file.js')
     .pipe(componentPackage())
-    .pipe(gulp.dest('dist');
+    .pipe(gulp.dest('dist'));
 ```
 
 В результате в папке `dist` будет создан файл `package.json`:
@@ -105,7 +106,7 @@ const componentTypings = require('library-utils/gulp/component-typings');
 
 gulp.src('file.js')
     .pipe(componentTypings('libraryName'))
-    .pipe(gulp.dest('dist');
+    .pipe(gulp.dest('dist'));
 ```
 
 В результате в папке `dist` будет создан файл `file.d.ts`.
@@ -141,7 +142,7 @@ const componentDocs = require('library-utils/gulp/component-docs');
 
 gulp.src('file.js')
     .pipe(componentDocs('libraryName'))
-    .pipe(gulp.dest('docs');
+    .pipe(gulp.dest('docs'));
 ```
 
 В результате в папке `docs` будет создан файл `README.md`, с описанием props и пубичных методов компонента.
@@ -158,7 +159,7 @@ const libraryDoc = require('library-utils/gulp/library-doc');
 
 gulp.src('src/*.js')
     .pipe(libraryDoc('libraryName'))
-    .pipe(gulp.dest('docs');
+    .pipe(gulp.dest('docs'));
 ```
 
 Лицензия

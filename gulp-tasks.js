@@ -5,6 +5,7 @@ const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
+const filter = require('gulp-filter');
 const clone = require('gulp-clone');
 const es = require('event-stream');
 const ts = require('gulp-typescript');
@@ -22,6 +23,9 @@ const defaultOptions = {
     componentsGlob: ['src/*/*.jsx', '!src/*/*-test.jsx', '!src/*/*-benchmark.jsx'],
     tsComponentsGlob: ['src/*/*.tsx'],
     jsGlob: ['src/**/*.{js,jsx}', '!src/**/*-test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
+    autoDtsGlob: [
+        'src/**/*.{js,jsx}', '!src/**/index.{js,jsx}', '!src/**/*-test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
+    ],
     tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*-test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
     cssCopyGlob: ['src/**/vars/**/*.css', 'src/vars*.css'],
@@ -161,9 +165,29 @@ function createTasks(packageName, options = {}) {
             .pipe(gulp.dest(options.docsDir));
     });
 
+    gulp.task('dts', ['js', 'publish-files', 'typings'], () => {
+        const tsOptions = {
+            declaration: true,
+            allowSyntheticDefaultImports: true,
+            lib: ['dom', 'es2015', 'es2016']
+        };
+
+        return gulp.src(options.autoDtsGlob)
+            .pipe(rename((path) => {
+                // typescript compiler won't compile files with non-ts extensions
+                path.extname = path.extname === '.jsx' ? '.tsx' : '.ts';
+            }))
+            .pipe(filter(file => !fs.existsSync(
+                // ignore all files, that already emit d.ts file
+                path.join(options.publishDir, file.relative).replace(/\.ts$/, '.d.ts')
+            )))
+            .pipe(ts(tsOptions, ts.reporter.nullReporter())) // ignore all errors at compile time
+            .dts.pipe(gulp.dest(options.publishDir));
+    });
+
     gulp.task(
         'compile',
-        ['js', 'css', 'resources', 'typings', 'publish-files'].concat(isTsEnabled ? ['ts'] : []),
+        ['js', 'css', 'resources', 'typings', 'publish-files', 'dts'].concat(isTsEnabled ? ['ts'] : []),
         checkErrors
     );
 }

@@ -15,6 +15,7 @@
     "gulp": "3.9.1",
     "gulp-babel": "7.0.1",
     "gulp-clone": "2.0.1",
+    "gulp-filter": "^5.1.0",
     "gulp-postcss": "7.0.1",
     "gulp-rename": "1.2.2",
     "gulp-sourcemaps": "2.6.4",
@@ -25,7 +26,7 @@
     "recast": "0.14.0",
     "resolve": "1.5.0",
     "through2": "2.0.3",
-    "typescript": "2.6.2",
+    "typescript": "2.9.2",
     "typescript-formatter": "7.1.0",
     "uppercamelcase": "3.0.0",
     "vinyl": "2.1.0"
