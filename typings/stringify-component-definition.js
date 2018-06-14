@@ -1,7 +1,8 @@
 /* eslint no-use-before-define: ["error", "nofunc"] */
 const upperCamelCase = require('uppercamelcase');
+const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
-function stringifyType(type, componentName, propName, typeRefs) {
+function stringifyType(type, componentName, propName, description, typeRefs) {
     const typeName = `${componentName}${upperCamelCase(propName)}FieldType`;
     switch (type.name) {
         case 'string':
@@ -11,14 +12,14 @@ function stringifyType(type, componentName, propName, typeRefs) {
         case 'bool':
             return 'boolean';
         case 'array':
-            return 'any[]';
+            return 'ReadonlyArray<any>';
         case 'node':
             return 'ReactNode';
         case 'union':
             typeRefs.push(`export type ${typeName} = ${stringifyUnion(type, componentName, propName, typeRefs)};`);
             return typeName;
         case 'func':
-            return 'Function';
+            return stringifyFunc(type, componentName, propName, description);
         case 'enum':
             typeRefs.push(`export type ${typeName} = ${stringifyEnum(type)};`);
             return typeName;
@@ -48,7 +49,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
 }
 
 function stringifyArray(type, componentName, propName, typeRefs) {
-    return `Array<${stringifyType(type.value, componentName, propName, typeRefs)}>`;
+    return `ReadonlyArray<${stringifyType(type.value, componentName, propName, null, typeRefs)}>`;
 }
 
 function stringifyEnum(type) {
@@ -56,7 +57,7 @@ function stringifyEnum(type) {
 }
 
 function stringifyUnion(type, componentName, propName, typeRefs) {
-    return `${type.value.map(type => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
+    return `${type.value.map(type => stringifyType(type, componentName, propName, null, typeRefs)).join(' | ')}`;
 }
 
 function stringifyDescription(description, docblock) {
@@ -66,11 +67,38 @@ function stringifyDescription(description, docblock) {
      */\n`;
 }
 
+function stringifyFunc(type, componentName, propName, description) {
+    try {
+        if (!description) {
+            return 'Function';
+        }
+        const parsedDoc = parseJsDoc(description);
+        if (!parsedDoc || (parsedDoc.params.length === 0 && parsedDoc.returns === null)) {
+            return 'Function';
+        }
+
+        const paramsTypes = parsedDoc.params
+            .map(p => `${p.name}?: any /*${p.type ? p.type.name : 'any'}*/`);
+
+        const returnType = parsedDoc.returns
+            ? parsedDoc.returns.type.name
+            : 'void';
+
+        return `(${paramsTypes.join(', ')}) => any /*${returnType}*/`;
+    } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn(`Unable to parse doc block for ${componentName}.${propName}`);
+        return 'Function';
+    }
+}
+
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
-    const typeDescription = stringifyType(type, componentName, `${propName}${upperCamelCase(fieldName)}`, typeRefs);
+    const typeDescription = stringifyType(
+        type, componentName, `${propName}${upperCamelCase(fieldName)}`, type.description, typeRefs
+    );
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
-        `${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
+        `readonly ${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
     );
 }
 
@@ -79,9 +107,9 @@ function stringifyShape(type, componentName, propName, typeRefs) {
     /* eslint-disable indent */
     return `{
         ${Object
-            .keys(fields)
-            .map(fieldName => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
-            .join(';\n')}
+        .keys(fields)
+        .map(fieldName => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
+        .join(';\n')}
     }`;
     /* eslint-enable indent */
 }
@@ -89,7 +117,7 @@ function stringifyShape(type, componentName, propName, typeRefs) {
 function stringifyObjectOf(type, componentName, propName, typeRefs) {
     const fieldType = type.value;
     return `{
-        [key: string]: ${stringifyType(fieldType, componentName, propName, typeRefs)};
+        readonly [key: string]: ${stringifyType(fieldType, componentName, propName, null, typeRefs)};
     }`;
 }
 
@@ -107,10 +135,12 @@ function stringifyComponentDefinition(info) {
         `
         export interface ${propsInterfaceName} {
             ${Object.keys(info.props).map((propName) => {
-                const { required, type, description, docblock } = info.props[propName];
-                const typeDef = stringifyType(type, info.displayName, propName, typeRefs);
-                return `${stringifyDescription(description, docblock)}${propName}${required ? '' : '?'}: ${typeDef};`;
-            }).join('')}
+            const { required, type, description, docblock } = info.props[propName];
+            const typeDef = stringifyType(type, info.displayName, propName, description || docblock, typeRefs);
+            const descriptionString = stringifyDescription(description, docblock);
+
+            return `${descriptionString}readonly ${propName}${required ? '' : '?'}: ${typeDef};`;
+        }).join('')}
         }
         `
         /* eslint-enable indent, object-curly-newline */
@@ -127,7 +157,7 @@ function stringifyComponentDefinition(info) {
         export type ${propTypesTypeName} = Record<keyof ${propsInterfaceName}, Type.Validator<${propsInterfaceName}>>;
 
         ${stringifyDescription(info.description, info.docblock)}
-        export default class ${info.displayName} extends Component<${propsInterfaceName}, any> {
+        export default class ${info.displayName} extends Component<${propsInterfaceName}> {
             static propTypes: ${propTypesTypeName};
             ${info.methods.map(stringifyMethod).join('')}
         }
