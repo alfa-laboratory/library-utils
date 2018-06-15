@@ -1,7 +1,7 @@
 /* eslint no-use-before-define: ["error", "nofunc"] */
 const upperCamelCase = require('uppercamelcase');
 
-function stringifyType(type, componentName, propName, description, typeRefs) {
+function stringifyType(type, componentName, propName, typeRefs) {
     const typeName = `${componentName}${upperCamelCase(propName)}FieldType`;
 
     if (typeof type === 'string' || !type) {
@@ -41,7 +41,7 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
             typeRefs.push(`export type ${typeName} = ${stringifyUnion(type, componentName, propName, typeRefs)};`);
             return typeName;
         case 'func':
-            return stringifyFunctionDefinition(type, componentName, propName, description, typeRefs, true);
+            return stringifyFunctionDefinition(type, componentName, propName, typeRefs, true);
         case 'enum':
             typeRefs.push(`export type ${typeName} = ${stringifyEnum(type)};`);
             return typeName;
@@ -73,7 +73,7 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
 }
 
 function stringifyArray(type, componentName, propName, typeRefs) {
-    return `ReadonlyArray<${stringifyType(type.value, componentName, propName, null, typeRefs)}>`;
+    return `ReadonlyArray<${stringifyType(type.value, componentName, propName, typeRefs)}>`;
 }
 
 function stringifyEnum(type) {
@@ -81,7 +81,7 @@ function stringifyEnum(type) {
 }
 
 function stringifyUnion(type, componentName, propName, typeRefs) {
-    return `${type.value.map(type => stringifyType(type, componentName, propName, null, typeRefs)).join(' | ')}`;
+    return `${type.value.map(type => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
 }
 
 function stringifyDescription(description, docblock) {
@@ -91,7 +91,7 @@ function stringifyDescription(description, docblock) {
      */\n`;
 }
 
-function stringifyFunctionDefinition(type, componentName, propName, description, typeRefs, useArrowNotation = false) {
+function stringifyFunctionDefinition(type, componentName, propName, typeRefs, useArrowNotation = false) {
     if (!type || !type.params || (type.params.length === 0 && type.returns === null)) {
         return useArrowNotation ? 'Function' : '(...args: any[]): any';
     }
@@ -99,22 +99,20 @@ function stringifyFunctionDefinition(type, componentName, propName, description,
     const paramsTypes = type.params
         .map((p) => {
             const type = p.type
-                ? stringifyType(p.type, componentName, `${propName}${upperCamelCase(p.name)}Param`, null, typeRefs)
+                ? stringifyType(p.type, componentName, `${propName}${upperCamelCase(p.name)}Param`, typeRefs)
                 : 'any';
             return `${p.name}?: ${type}`;
         });
 
     const returnType = type.returns
-        ? stringifyType(type.returns.type || type.returns, componentName, `${propName}Return`, null, typeRefs)
+        ? stringifyType(type.returns.type || type.returns, componentName, `${propName}Return`, typeRefs)
         : 'void';
 
     return `(${paramsTypes.join(', ')}) ${useArrowNotation ? '=>' : ':'} ${returnType}`;
 }
 
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
-    const typeDescription = stringifyType(
-        type, componentName, `${propName}${upperCamelCase(fieldName)}`, type.description, typeRefs
-    );
+    const typeDescription = stringifyType(type, componentName, `${propName}${upperCamelCase(fieldName)}`, typeRefs);
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
         `readonly ${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
@@ -136,12 +134,12 @@ function stringifyShape(type, componentName, propName, typeRefs) {
 function stringifyObjectOf(type, componentName, propName, typeRefs) {
     const fieldType = type.value;
     return `{
-        readonly [key: string]: ${stringifyType(fieldType, componentName, propName, null, typeRefs)};
+        readonly [key: string]: ${stringifyType(fieldType, componentName, propName, typeRefs)};
     }`;
 }
 
 function stringifyClassMethod(type, componentName, typeRefs) {
-    const typeDef = stringifyFunctionDefinition(type, componentName, type.name, null, typeRefs, false);
+    const typeDef = stringifyFunctionDefinition(type, componentName, type.name, typeRefs, false);
     const description = stringifyDescription(type.description, type.docblock);
 
     return `${description}${type.name}${typeDef};`;
@@ -157,7 +155,7 @@ function stringifyComponentDefinition(info) {
         export interface ${propsInterfaceName} {
             ${Object.keys(info.props).map((propName) => {
             const { required, type, description, docblock } = info.props[propName];
-            const typeDef = stringifyType(type, info.displayName, propName, description || docblock, typeRefs);
+            const typeDef = stringifyType(type, info.displayName, propName, typeRefs);
             const descriptionString = stringifyDescription(description, docblock);
 
             return `${descriptionString}readonly ${propName}${required ? '' : '?'}: ${typeDef};\n`;
