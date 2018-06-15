@@ -179,7 +179,8 @@ function createTasks(packageName, options = {}) {
             }))
             .pipe(filter(file => !fs.existsSync(
                 // ignore all files, that already emit d.ts file
-                path.join(options.publishDir, file.relative).replace(/\.ts$/, '.d.ts')
+                path.join(process.cwd(), options.publishDir, file.relative)
+                    .replace(/\.tsx?$/, '.d.ts')
             )))
             .pipe(ts(tsOptions, ts.reporter.nullReporter())) // ignore all errors at compile time
             .dts.pipe(gulp.dest(options.publishDir));
