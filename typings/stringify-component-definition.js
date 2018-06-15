@@ -51,11 +51,13 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
         case 'any':
             return 'any';
         case 'Event':
-        case 'HTMLElement':
         case 'Date':
         case 'File':
             return type.name;
         default:
+            if (typeof type.name === 'string' && (type.name.startsWith('React.') || type.name.startsWith('HTML'))) {
+                return type.name;
+            }
             return 'any' +
                 `/* Не нашёлся встроенный тип для типа ${JSON.stringify(type)}
                   * https://github.com/alfa-laboratory/library-utils/issues/new
