@@ -1,6 +1,5 @@
 /* eslint no-use-before-define: ["error", "nofunc"] */
 const upperCamelCase = require('uppercamelcase');
-const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
 function stringifyType(type, componentName, propName, description, typeRefs) {
     const typeName = `${componentName}${upperCamelCase(propName)}FieldType`;
@@ -10,6 +9,7 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
     }
 
     switch (type.name) {
+        // plain types
         case 'string':
         case 'String':
             return 'string';
@@ -23,13 +23,25 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
         case 'array':
         case 'Array':
             return 'ReadonlyArray<any>';
+        case 'symbol':
+            return 'Symbol';
         case 'node':
+        case 'element':
             return 'ReactNode';
+        case 'object':
+            return 'object';
+        case 'any':
+            return 'any';
+        case 'Event':
+        case 'Date':
+        case 'File':
+            return type.name;
+        // complex types
         case 'union':
             typeRefs.push(`export type ${typeName} = ${stringifyUnion(type, componentName, propName, typeRefs)};`);
             return typeName;
         case 'func':
-            return stringifyFunc(type, componentName, propName, description, typeRefs);
+            return stringifyFunctionDefinition(type, componentName, propName, description, typeRefs, true);
         case 'enum':
             typeRefs.push(`export type ${typeName} = ${stringifyEnum(type)};`);
             return typeName;
@@ -46,16 +58,11 @@ function stringifyType(type, componentName, propName, description, typeRefs) {
                 typeRefs
             )};`);
             return typeName;
-        case 'object':
-            return 'object';
-        case 'any':
-            return 'any';
-        case 'Event':
-        case 'Date':
-        case 'File':
-            return type.name;
         default:
             if (typeof type.name === 'string' && (type.name.startsWith('React.') || type.name.startsWith('HTML'))) {
+                if (type.name.match(/React.[A-z]+Event$/)) {
+                    return `${type.name}<any>`; // All react events are generics
+                }
                 return type.name;
             }
             return 'any' +
@@ -84,23 +91,8 @@ function stringifyDescription(description, docblock) {
      */\n`;
 }
 
-function stringifyFunc(type, componentName, propName, description, typeRefs) {
-    if (!description) {
-        return 'Function';
-    }
-    try {
-        const parsedDoc = parseJsDoc(description);
-
-        return stringifyFunctionDefinition(parsedDoc, componentName, propName, description, typeRefs, true);
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn(`Unable to parse doc block for ${componentName}.${propName}`);
-        return 'Function';
-    }
-}
-
 function stringifyFunctionDefinition(type, componentName, propName, description, typeRefs, useArrowNotation = false) {
-    if (!type || (type.params.length === 0 && type.returns === null)) {
+    if (!type || !type.params || (type.params.length === 0 && type.returns === null)) {
         return useArrowNotation ? 'Function' : '(...args: any[]): any';
     }
 
@@ -168,7 +160,7 @@ function stringifyComponentDefinition(info) {
             const typeDef = stringifyType(type, info.displayName, propName, description || docblock, typeRefs);
             const descriptionString = stringifyDescription(description, docblock);
 
-            return `${descriptionString}readonly ${propName}${required ? '' : '?'}: ${typeDef};`;
+            return `${descriptionString}readonly ${propName}${required ? '' : '?'}: ${typeDef};\n`;
         }).join('')}
         }
         `
