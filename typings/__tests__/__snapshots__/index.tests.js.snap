@@ -5,90 +5,104 @@ exports[`simple component with all prop types 1`] = `
 import { Component, ReactNode } from 'react';
 import * as Type from 'prop-types';
 
+
+type Primitive = string | number | boolean | undefined | null;
+type DeepReadonly<T> =
+    T extends Primitive ? T :
+    T extends Array<infer U> ? DeepReadonlyArray<U> :
+    DeepReadonlyObject<T>;
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
+
+type DeepReadonlyObject<T> = {
+    readonly [P in keyof T]: DeepReadonly<T[P]>
+};
+
+
 export type AOptionalEnumFieldType = 'News' | 'Photos';
 export type ARequiredEnumFieldType = 'News' | 'Photos';
 export type AOptionalUnionFieldType = string | number;
 export type ARequiredUnionFieldType = string | number;
 export type AOptionalObjectOfFieldType = {
-    readonly [key: string]: number;
+    [key: string]: number;
 };
 export type ARequiredObjectOfFieldType = {
-    readonly [key: string]: number;
+    [key: string]: number;
 };
 export type AOptionalObjectWithShapeSubShapeFieldType = {
 
     /**
      * Even deeper documentation
      */
-    readonly name?: string;
-    readonly size?: number
+    name?: string;
+    size?: number
 };
 export type AOptionalObjectWithShapeFieldType = {
-    readonly color?: string;
+    color?: string;
 
     /**
      * Sub prop documentation
      */
-    readonly fontSize: number;
+    fontSize: number;
 
     /**
      * @param {string} value
      */
-    readonly onChange?: Function;
-    readonly subShape?: AOptionalObjectWithShapeSubShapeFieldType
+    onChange?: Function;
+    subShape?: AOptionalObjectWithShapeSubShapeFieldType
 };
 export type AOnClickReturnFieldType = string | number;
 export type APublicWithParamsUnionParamFieldType = string | number;
 
 
-export interface AProps {
-    readonly optionalArray?: ReadonlyArray<any>;
-    readonly requiredArray: ReadonlyArray<any>;
+export type AProps = DeepReadonlyObject<{
+    optionalArray?: any[];
+    requiredArray: any[];
 
     /**
      * Prop documentation
      */
-    readonly optionalBool?: boolean;
-    readonly requiredBool: boolean;
-    readonly optionalFunc?: Function;
-    readonly requiredFunc: Function;
-    readonly optionalNumber?: number;
-    readonly requiredNumber: number;
-    readonly optionalObject?: object;
-    readonly requiredObject: object;
-    readonly optionalString?: string;
-    readonly requiredString: string;
-    readonly optionalSymbol?: Symbol;
-    readonly requiredSymbol: Symbol;
-    readonly optionalNode?: ReactNode;
-    readonly requiredNode: ReactNode;
-    readonly optionalElement?: ReactNode;
-    readonly requiredElement: ReactNode;
-    readonly optionalMessage?: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
+    optionalBool?: boolean;
+    requiredBool: boolean;
+    optionalFunc?: Function;
+    requiredFunc: Function;
+    optionalNumber?: number;
+    requiredNumber: number;
+    optionalObject?: object;
+    requiredObject: object;
+    optionalString?: string;
+    requiredString: string;
+    optionalSymbol?: Symbol;
+    requiredSymbol: Symbol;
+    optionalNode?: ReactNode;
+    requiredNode: ReactNode;
+    optionalElement?: ReactNode;
+    requiredElement: ReactNode;
+    optionalMessage?: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
                   * https://github.com/alfa-laboratory/library-utils/issues/new
                   */;
-    readonly requiredMessage: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
+    requiredMessage: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
                   * https://github.com/alfa-laboratory/library-utils/issues/new
                   */;
-    readonly optionalEnum?: AOptionalEnumFieldType;
-    readonly requiredEnum: ARequiredEnumFieldType;
-    readonly optionalUnion?: AOptionalUnionFieldType;
-    readonly requiredUnion: ARequiredUnionFieldType;
-    readonly optionalArrayOf?: ReadonlyArray<number>;
-    readonly requiredArrayOf: ReadonlyArray<number>;
-    readonly optionalObjectOf?: AOptionalObjectOfFieldType;
-    readonly requiredObjectOf: ARequiredObjectOfFieldType;
-    readonly optionalAny?: any;
-    readonly requiredAny: any;
-    readonly optionalObjectWithShape?: AOptionalObjectWithShapeFieldType;
+    optionalEnum?: AOptionalEnumFieldType;
+    requiredEnum: ARequiredEnumFieldType;
+    optionalUnion?: AOptionalUnionFieldType;
+    requiredUnion: ARequiredUnionFieldType;
+    optionalArrayOf?: ReadonlyArray<number>;
+    requiredArrayOf: ReadonlyArray<number>;
+    optionalObjectOf?: AOptionalObjectOfFieldType;
+    requiredObjectOf: ARequiredObjectOfFieldType;
+    optionalAny?: any;
+    requiredAny: any;
+    optionalObjectWithShape?: AOptionalObjectWithShapeFieldType;
 
     /**
      * Callback with documentation
      */
-    readonly onClick?: (stringParam?: string, count?: number, event?: React.MouseEvent<any>, anotherEvent?: React.KeyboardEvent<any>, element?: HTMLDivElement) => AOnClickReturnFieldType;
-    readonly onChange?: Function;
+    onClick?: (stringParam?: string, count?: number, event?: React.MouseEvent<any>, anotherEvent?: React.KeyboardEvent<any>, element?: HTMLDivElement) => AOnClickReturnFieldType;
+    onChange?: Function;
 
-}
+}>;
 
 
 export type APropTypes = Record<keyof AProps, Type.Validator<AProps>>;

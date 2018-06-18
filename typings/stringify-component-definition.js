@@ -22,7 +22,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
             return 'boolean';
         case 'array':
         case 'Array':
-            return 'ReadonlyArray<any>';
+            return 'any[]';
         case 'symbol':
             return 'Symbol';
         case 'node':
@@ -115,7 +115,7 @@ function stringifyField(fieldName, type, componentName, propName, typeRefs) {
     const typeDescription = stringifyType(type, componentName, `${propName}${upperCamelCase(fieldName)}`, typeRefs);
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
-        `readonly ${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
+        `${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
     );
 }
 
@@ -134,7 +134,7 @@ function stringifyShape(type, componentName, propName, typeRefs) {
 function stringifyObjectOf(type, componentName, propName, typeRefs) {
     const fieldType = type.value;
     return `{
-        readonly [key: string]: ${stringifyType(fieldType, componentName, propName, typeRefs)};
+        [key: string]: ${stringifyType(fieldType, componentName, propName, typeRefs)};
     }`;
 }
 
@@ -145,6 +145,20 @@ function stringifyClassMethod(type, componentName, typeRefs) {
     return `${description}${type.name}${typeDef};`;
 }
 
+const DEPP_READONLY_TYPES = `
+type Primitive = string | number | boolean | undefined | null;
+type DeepReadonly<T> =
+  T extends Primitive ? T :
+  T extends Array<infer U> ? DeepReadonlyArray<U> :
+  DeepReadonlyObject<T>;
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
+
+type DeepReadonlyObject<T> = {
+  readonly [P in keyof T]: DeepReadonly<T[P]>
+};
+`;
+
 function stringifyComponentDefinition(info) {
     const typeRefs = []; // PropType fields typedefs
     const propsInterfaceName = `${info.displayName}Props`;
@@ -152,15 +166,15 @@ function stringifyComponentDefinition(info) {
     const propsDef = (
         /* eslint-disable indent, object-curly-newline */
         `
-        export interface ${propsInterfaceName} {
+        export type ${propsInterfaceName} = DeepReadonlyObject<{
             ${Object.keys(info.props).map((propName) => {
             const { required, type, description, docblock } = info.props[propName];
             const typeDef = stringifyType(type, info.displayName, propName, typeRefs);
             const descriptionString = stringifyDescription(description, docblock);
 
-            return `${descriptionString}readonly ${propName}${required ? '' : '?'}: ${typeDef};\n`;
+            return `${descriptionString}${propName}${required ? '' : '?'}: ${typeDef};\n`;
         }).join('')}
-        }
+        }>;
         `
         /* eslint-enable indent, object-curly-newline */
     );
@@ -172,6 +186,8 @@ function stringifyComponentDefinition(info) {
         `
         import { Component, ReactNode } from 'react';
         import * as Type from 'prop-types';
+        
+        ${DEPP_READONLY_TYPES}
 
         ${typeRefs.join('\n')}
 
