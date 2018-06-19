@@ -1,8 +1,9 @@
 const path = require('path');
 const reactDocGen = require('react-docgen');
+const { createDisplayNameHandler } = require('react-docgen-displayname-handler');
 const getSourceFileContent = require('./get-source-file-content');
 const createResolver = require('./create-resolver');
-const createDisplayNameHandler = require('react-docgen-displayname-handler').createDisplayNameHandler;
+const componentPropTypesJsDocHandler = require('./component-prop-types-js-doc-handler');
 
 const documentation = {};
 const defaultHandlers = [
@@ -15,7 +16,8 @@ const defaultHandlers = [
     reactDocGen.handlers.componentDocblockHandler,
     reactDocGen.handlers.displayNameHandler,
     reactDocGen.handlers.componentMethodsHandler,
-    reactDocGen.handlers.componentMethodsJsDocHandler
+    reactDocGen.handlers.componentMethodsJsDocHandler,
+    componentPropTypesJsDocHandler
 ];
 
 function getReactComponentInfo(filePath, parentPath) {
@@ -24,7 +26,7 @@ function getReactComponentInfo(filePath, parentPath) {
     }
 
     const src = getSourceFileContent(filePath, parentPath);
-    const content = src.content;
+    const { content } = src;
     filePath = src.filePath;
     const info = reactDocGen.parse(
         content,
@@ -44,5 +46,6 @@ function getReactComponentInfo(filePath, parentPath) {
     documentation[filePath] = info;
     return info;
 }
+
 
 module.exports = getReactComponentInfo;

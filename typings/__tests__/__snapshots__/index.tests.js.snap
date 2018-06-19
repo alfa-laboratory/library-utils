@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple component with all prop types 1`] = `
+"
+import { Component, ReactNode } from 'react';
+import * as Type from 'prop-types';
+
+
+type Primitive = string | number | boolean | undefined | null;
+type DeepReadonly<T> =
+    T extends Primitive ? T :
+    T extends Array<infer U> ? DeepReadonlyArray<U> :
+    DeepReadonlyObject<T>;
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
+
+type DeepReadonlyObject<T> = {
+    readonly [P in keyof T]: DeepReadonly<T[P]>
+};
+
+
+export type AOptionalEnumFieldType = 'News' | 'Photos';
+export type ARequiredEnumFieldType = 'News' | 'Photos';
+export type AOptionalUnionFieldType = string | number;
+export type ARequiredUnionFieldType = string | number;
+export type AOptionalObjectOfFieldType = {
+    [key: string]: number;
+};
+export type ARequiredObjectOfFieldType = {
+    [key: string]: number;
+};
+export type AOptionalObjectWithShapeSubShapeFieldType = {
+
+    /**
+     * Even deeper documentation
+     */
+    name?: string;
+    size?: number
+};
+export type AOptionalObjectWithShapeFieldType = {
+    color?: string;
+
+    /**
+     * Sub prop documentation
+     */
+    fontSize: number;
+
+    /**
+     * @param {string} value
+     */
+    onChange?: Function;
+    subShape?: AOptionalObjectWithShapeSubShapeFieldType
+};
+export type AOnClickReturnFieldType = string | number;
+export type APublicWithParamsUnionParamFieldType = string | number;
+
+
+export type AProps = DeepReadonlyObject<{
+    optionalArray?: any[];
+    requiredArray: any[];
+
+    /**
+     * Prop documentation
+     */
+    optionalBool?: boolean;
+    requiredBool: boolean;
+    optionalFunc?: Function;
+    requiredFunc: Function;
+    optionalNumber?: number;
+    requiredNumber: number;
+    optionalObject?: object;
+    requiredObject: object;
+    optionalString?: string;
+    requiredString: string;
+    optionalSymbol?: Symbol;
+    requiredSymbol: Symbol;
+    optionalNode?: ReactNode;
+    requiredNode: ReactNode;
+    optionalElement?: ReactNode;
+    requiredElement: ReactNode;
+    optionalMessage?: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
+                  * https://github.com/alfa-laboratory/library-utils/issues/new
+                  */;
+    requiredMessage: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
+                  * https://github.com/alfa-laboratory/library-utils/issues/new
+                  */;
+    optionalEnum?: AOptionalEnumFieldType;
+    requiredEnum: ARequiredEnumFieldType;
+    optionalUnion?: AOptionalUnionFieldType;
+    requiredUnion: ARequiredUnionFieldType;
+    optionalArrayOf?: ReadonlyArray<number>;
+    requiredArrayOf: ReadonlyArray<number>;
+    optionalObjectOf?: AOptionalObjectOfFieldType;
+    requiredObjectOf: ARequiredObjectOfFieldType;
+    optionalAny?: any;
+    requiredAny: any;
+    optionalObjectWithShape?: AOptionalObjectWithShapeFieldType;
+
+    /**
+     * Callback with documentation
+     */
+    onClick?: (stringParam?: string, count?: number, event?: React.MouseEvent<any>, anotherEvent?: React.KeyboardEvent<any>, element?: HTMLDivElement) => AOnClickReturnFieldType;
+    onChange?: Function;
+
+}>;
+
+
+export type APropTypes = Record<keyof AProps, Type.Validator<AProps>>;
+
+
+/**
+ * Component description.
+ */
+
+export default class A extends Component<AProps> {
+    static propTypes: APropTypes;
+
+    /**
+     * Some description.
+     */
+    publicMethod1(...args: any[]): any;
+
+    /**
+     * Maybe we just forgot to add params?
+     */
+    publicMethodWithouParams(...args: any[]): any;
+
+    /**
+     * Some description.
+     */
+    publicWithParams(str1?: string, str2?: string, num1?: number, num2?: number, bool1?: boolean, bool2?: boolean, bool3?: boolean, union?: APublicWithParamsUnionParamFieldType): void;
+}
+"
+`;

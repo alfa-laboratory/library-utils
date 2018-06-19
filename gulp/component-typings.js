@@ -6,7 +6,6 @@ const getReactComponentDefinitionsContent = require('../typings/index');
 /**
  * Gulp plugin to generate react typings and root package.json for each component.
  *
- * @param {String} libraryName Library name, will be used in typescript declarations.
  * @returns {Function}
  */
 function componentTypings() {
@@ -18,6 +17,7 @@ function componentTypings() {
         const componentName = path.parse(file.path).name;
         getReactComponentDefinitionsContent(file.path).then((definitionsContent) => {
             if (!definitionsContent) {
+                // eslint-disable-next-line no-console
                 console.warn(`Unable to create typings for ${file.path}`);
                 return callback(null);
             }
@@ -28,6 +28,7 @@ function componentTypings() {
                 contents: Buffer.from(definitionsContent)
             }));
         }).catch((e) => {
+            // eslint-disable-next-line no-console
             console.error(e);
         });
     }

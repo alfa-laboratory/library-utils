@@ -27,6 +27,7 @@ function libraryDoc(libraryName) {
         try {
             components.push(structureForFile(content, componentName));
         } catch (e) {
+            // eslint-disable-next-line no-console
             console.warn(`unable to build docs for ${file.path}`);
         }
 
