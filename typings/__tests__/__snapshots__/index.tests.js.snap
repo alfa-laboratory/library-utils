@@ -2,7 +2,7 @@
 
 exports[`simple component with all prop types 1`] = `
 "
-import { Component, ReactNode } from 'react';
+import * as React from 'react';
 import * as Type from 'prop-types';
 
 
@@ -74,10 +74,10 @@ export type AProps = DeepReadonlyObject<{
     requiredString: string;
     optionalSymbol?: Symbol;
     requiredSymbol: Symbol;
-    optionalNode?: ReactNode;
-    requiredNode: ReactNode;
-    optionalElement?: ReactNode;
-    requiredElement: ReactNode;
+    optionalNode?: React.ReactNode;
+    requiredNode: React.ReactNode;
+    optionalElement?: React.ReactNode;
+    requiredElement: React.ReactNode;
     optionalMessage?: any/* Не нашёлся встроенный тип для типа {\\"name\\":\\"instanceOf\\",\\"value\\":\\"Message\\"}
                   * https://github.com/alfa-laboratory/library-utils/issues/new
                   */;
@@ -112,7 +112,7 @@ export type APropTypes = Record<keyof AProps, Type.Validator<AProps>>;
  * Component description.
  */
 
-export default class A extends Component<AProps> {
+export default class A extends React.Component<AProps> {
     static propTypes: APropTypes;
 
     /**

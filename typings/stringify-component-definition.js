@@ -27,7 +27,7 @@ function stringifyType(type, componentName, propName, typeRefs) {
             return 'Symbol';
         case 'node':
         case 'element':
-            return 'ReactNode';
+            return 'React.ReactNode';
         case 'object':
             return 'object';
         case 'any':
@@ -184,7 +184,7 @@ function stringifyComponentDefinition(info) {
 
     return (
         `
-        import { Component, ReactNode } from 'react';
+        import * as React from 'react';
         import * as Type from 'prop-types';
         
         ${DEPP_READONLY_TYPES}
@@ -196,7 +196,7 @@ function stringifyComponentDefinition(info) {
         export type ${propTypesTypeName} = Record<keyof ${propsInterfaceName}, Type.Validator<${propsInterfaceName}>>;
 
         ${stringifyDescription(info.description, info.docblock)}
-        export default class ${info.displayName} extends Component<${propsInterfaceName}> {
+        export default class ${info.displayName} extends React.Component<${propsInterfaceName}> {
             static propTypes: ${propTypesTypeName};
             ${methodsDefs.join('\n')}
         }
