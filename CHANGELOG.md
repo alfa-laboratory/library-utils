@@ -1,3 +1,25 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/alfa-laboratory/library-utils/compare/v1.9.1...v2.0.0) (2018-06-20)
+
+
+### Bug Fixes
+
+* **typings:** do not override existing d.ts ([da0fe47](https://github.com/alfa-laboratory/library-utils/commit/da0fe47))
+* **typings:** import whole react in typings ([703eaf8](https://github.com/alfa-laboratory/library-utils/commit/703eaf8))
+* **typings:** remove unused params ([eaa70ec](https://github.com/alfa-laboratory/library-utils/commit/eaa70ec))
+
+
+### Features
+
+* add auto d.ts generation for all non-components js files ([ce35eaf](https://github.com/alfa-laboratory/library-utils/commit/ce35eaf))
+* add params information to func proptypes where possible ([c9d0a19](https://github.com/alfa-laboratory/library-utils/commit/c9d0a19))
+* add tests, move props jsdoc parser to react-docgen handler ([eb2a629](https://github.com/alfa-laboratory/library-utils/commit/eb2a629))
+* **typings:** accept all HTML and React types as valid ts types ([e939da8](https://github.com/alfa-laboratory/library-utils/commit/e939da8))
+* **typings:** create correct typings from jsdoc ([6136e90](https://github.com/alfa-laboratory/library-utils/commit/6136e90))
+* **typings:** use DeepReadonly generic ([17c6f8b](https://github.com/alfa-laboratory/library-utils/commit/17c6f8b))
+
+
+
 <a name="1.9.1"></a>
 ## [1.9.1](https://github.com/alfa-laboratory/library-utils/compare/v1.9.0...v1.9.1) (2018-03-30)
 
