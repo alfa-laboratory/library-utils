@@ -29,7 +29,7 @@
     "typescript": "2.9.2",
     "typescript-formatter": "7.1.0",
     "uppercamelcase": "3.0.0",
-    "vinyl": "2.1.0"
+    "vinyl": "2.2.0"
   },
   "devDependencies": {
     "arui-presets": "4.11.9",
