@@ -11,7 +11,7 @@
   "dependencies": {
     "del": "3.0.0",
     "ejs": "2.5.7",
-    "event-stream": "3.3.4",
+    "event-stream": "3.3.5",
     "gulp": "3.9.1",
     "gulp-babel": "7.0.1",
     "gulp-clone": "2.0.1",
