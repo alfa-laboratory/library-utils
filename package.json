@@ -25,7 +25,7 @@
     "react-docgen-displayname-handler": "1.0.1",
     "recast": "0.14.0",
     "resolve": "1.5.0",
-    "through2": "2.0.3",
+    "through2": "2.0.4",
     "typescript": "2.9.2",
     "typescript-formatter": "7.1.0",
     "uppercamelcase": "3.0.0",
