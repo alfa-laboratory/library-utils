@@ -2,10 +2,16 @@
 const upperCamelCase = require('uppercamelcase');
 
 function stringifyType(type, componentName, propName, typeRefs) {
-    const typeName = `${componentName}${upperCamelCase(propName)}FieldType`;
+    let typeName = `${componentName}${upperCamelCase(propName)}`;
 
     if (typeof type === 'string' || !type) {
         type = { name: type };
+    }
+
+    if (type.name === 'shape') {
+        typeName = `${typeName}ShapeType`;
+    } else {
+        typeName = `${typeName}FieldType`;
     }
 
     switch (type.name) {
