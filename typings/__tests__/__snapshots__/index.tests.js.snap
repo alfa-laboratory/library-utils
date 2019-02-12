@@ -29,7 +29,7 @@ export type AOptionalObjectOfFieldType = {
 export type ARequiredObjectOfFieldType = {
     [key: string]: number;
 };
-export type AOptionalObjectWithShapeSubShapeFieldType = {
+export type AOptionalObjectWithShapeSubShapeShapeType = {
 
     /**
      * Even deeper documentation
@@ -37,7 +37,7 @@ export type AOptionalObjectWithShapeSubShapeFieldType = {
     name?: string;
     size?: number
 };
-export type AOptionalObjectWithShapeFieldType = {
+export type AOptionalObjectWithShapeShapeType = {
     color?: string;
 
     /**
@@ -49,7 +49,7 @@ export type AOptionalObjectWithShapeFieldType = {
      * @param {string} value
      */
     onChange?: Function;
-    subShape?: AOptionalObjectWithShapeSubShapeFieldType
+    subShape?: AOptionalObjectWithShapeSubShapeShapeType
 };
 export type AOnClickReturnFieldType = string | number;
 export type APublicWithParamsUnionParamFieldType = string | number;
@@ -94,7 +94,7 @@ export type AProps = DeepReadonlyObject<{
     requiredObjectOf: ARequiredObjectOfFieldType;
     optionalAny?: any;
     requiredAny: any;
-    optionalObjectWithShape?: AOptionalObjectWithShapeFieldType;
+    optionalObjectWithShape?: AOptionalObjectWithShapeShapeType;
 
     /**
      * Callback with documentation
@@ -105,7 +105,7 @@ export type AProps = DeepReadonlyObject<{
 }>;
 
 
-export type APropTypes = Record<keyof AProps, Type.Validator<AProps>>;
+export type APropTypes = Type.ValidationMap<AProps>;
 
 
 /**

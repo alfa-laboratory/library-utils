@@ -199,7 +199,7 @@ function stringifyComponentDefinition(info) {
 
         ${propsDef}
         
-        export type ${propTypesTypeName} = Record<keyof ${propsInterfaceName}, Type.Validator<${propsInterfaceName}>>;
+        export type ${propTypesTypeName} = Type.ValidationMap<${propsInterfaceName}>;
 
         ${stringifyDescription(info.description, info.docblock)}
         export default class ${info.displayName} extends React.Component<${propsInterfaceName}> {
