@@ -1,3 +1,14 @@
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/alfa-laboratory/library-utils/compare/v2.2.0...v2.3.0) (2019-02-12)
+
+
+### Bug Fixes
+
+* **typings:** correct propType definitions ([d71b13c](https://github.com/alfa-laboratory/library-utils/commit/d71b13c))
+* **typings:** simplify generated typings ([3998d77](https://github.com/alfa-laboratory/library-utils/commit/3998d77))
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/alfa-laboratory/library-utils/compare/v2.1.0...v2.2.0) (2019-01-14)
 
