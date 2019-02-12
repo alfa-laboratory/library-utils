@@ -105,7 +105,7 @@ export type AProps = DeepReadonlyObject<{
 }>;
 
 
-export type APropTypes = Record<keyof AProps, Type.Validator<any>>;
+export type APropTypes = Type.ValidationMap<AProps>;
 
 
 /**
