@@ -9,7 +9,7 @@
   "author": "Good guys from Alfa Laboratory",
   "license": "MIT",
   "dependencies": {
-    "del": "3.0.0",
+    "del": "4.0.0",
     "ejs": "2.5.7",
     "event-stream": "3.3.4",
     "gulp": "3.9.1",
