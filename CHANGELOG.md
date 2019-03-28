@@ -1,3 +1,13 @@
+<a name="2.3.1"></a>
+## [2.3.1](https://github.com/alfa-laboratory/library-utils/compare/v2.3.0...v2.3.1) (2019-03-28)
+
+
+### Bug Fixes
+
+* **typings:** add quoted field names support ([d987c1a](https://github.com/alfa-laboratory/library-utils/commit/d987c1a))
+
+
+
 <a name="2.3.0"></a>
 # [2.3.0](https://github.com/alfa-laboratory/library-utils/compare/v2.2.0...v2.3.0) (2019-02-12)
 
