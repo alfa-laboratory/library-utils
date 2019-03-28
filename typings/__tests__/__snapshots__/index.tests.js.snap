@@ -35,7 +35,8 @@ export type AOptionalObjectWithShapeSubShapeShapeType = {
      * Even deeper documentation
      */
     name?: string;
-    size?: number
+    size?: number;
+    'quoted-field'?: string
 };
 export type AOptionalObjectWithShapeShapeType = {
     color?: string;
@@ -101,6 +102,7 @@ export type AProps = DeepReadonlyObject<{
      */
     onClick?: (stringParam?: string, count?: number, event?: React.MouseEvent<any>, anotherEvent?: React.KeyboardEvent<any>, element?: HTMLDivElement) => AOnClickReturnFieldType;
     onChange?: Function;
+    '9validPropName'?: number;
 
 }>;
 

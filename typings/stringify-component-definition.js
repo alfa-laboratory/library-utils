@@ -117,11 +117,20 @@ function stringifyFunctionDefinition(type, componentName, propName, typeRefs, us
     return `(${paramsTypes.join(', ')}) ${useArrowNotation ? '=>' : ':'} ${returnType}`;
 }
 
+function stringifyFieldName(fieldName) {
+    if (/^[A-z][A-z0-9]+$/.test(fieldName)) {
+        return fieldName;
+    }
+
+    return `'${fieldName}'`;
+}
+
 function stringifyField(fieldName, type, componentName, propName, typeRefs) {
     const typeDescription = stringifyType(type, componentName, `${propName}${upperCamelCase(fieldName)}`, typeRefs);
+
     return (
         stringifyDescription(type.description, type.docblock) + // eslint-disable-line prefer-template
-        `${fieldName}${type.required ? '' : '?'}: ${typeDescription}`
+        `${stringifyFieldName(fieldName)}${type.required ? '' : '?'}: ${typeDescription}`
     );
 }
 
@@ -178,7 +187,7 @@ function stringifyComponentDefinition(info) {
             const typeDef = stringifyType(type, info.displayName, propName, typeRefs);
             const descriptionString = stringifyDescription(description, docblock);
 
-            return `${descriptionString}${propName}${required ? '' : '?'}: ${typeDef};\n`;
+            return `${descriptionString}${stringifyFieldName(propName)}${required ? '' : '?'}: ${typeDef};\n`;
         }).join('')}
         }>;
         `
