@@ -61,7 +61,8 @@ export default class A extends React.Component {
                  * Even deeper documentation
                  */
                 name: PropTypes.string,
-                size: PropTypes.number
+                size: PropTypes.number,
+                'quoted-field': PropTypes.string
             })
         }),
         /**
@@ -76,7 +77,8 @@ export default class A extends React.Component {
          * @returns {string|number}
          */
         onClick: PropTypes.func,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        '9validPropName': PropTypes.number
     };
 
     render() {
