@@ -7,7 +7,7 @@ function getSourceFileContent(filePath, parentPath) {
         if (path.extname(parentPath)) {
             parentPath = path.dirname(parentPath);
         }
-        filePath = resolve(filePath, { basedir: parentPath, extensions: ['.js', '.jsx'] });
+        filePath = resolve(filePath, { basedir: parentPath, extensions: ['.js', '.jsx', '.ts', '.tsx'] });
     }
     if (fs.existsSync(`${filePath}.map`)) { // if we have file with source map, read it
         return {
