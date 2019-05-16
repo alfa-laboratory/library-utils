@@ -1,3 +1,13 @@
+<a name="2.4.0"></a>
+# [2.4.0](https://github.com/alfa-laboratory/library-utils/compare/v2.3.1...v2.4.0) (2019-05-16)
+
+
+### Bug Fixes
+
+* **react-doc:** add ts,tsx extensions to resolver ([eda8382](https://github.com/alfa-laboratory/library-utils/commit/eda8382))
+
+
+
 <a name="2.3.1"></a>
 ## [2.3.1](https://github.com/alfa-laboratory/library-utils/compare/v2.3.0...v2.3.1) (2019-03-28)
 
