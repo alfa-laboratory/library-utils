@@ -1,6 +1,6 @@
 {
   "name": "library-utils",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Utils for component libraries processing and compilation",
   "repository": {
     "type": "git",

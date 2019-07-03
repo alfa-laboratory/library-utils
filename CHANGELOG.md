@@ -1,3 +1,13 @@
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/alfa-laboratory/library-utils/compare/v2.4.0...v2.4.1) (2019-07-03)
+
+
+### Bug Fixes
+
+* **component-package:** add ts index file support ([27810d1](https://github.com/alfa-laboratory/library-utils/commit/27810d1))
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/alfa-laboratory/library-utils/compare/v2.3.1...v2.4.0) (2019-05-16)
 
