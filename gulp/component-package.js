@@ -16,7 +16,7 @@ function getComponentPackage(file) {
         || fs.existsSync(path.join(dirname, 'index.ts'));
     return JSON.stringify({
         main: isIndexFileExist ? 'index.js' : `${componentName}.js`,
-        types: `${componentName}.d.ts`
+        types: isIndexFileExist ? 'index.d.ts' : `${componentName}.d.ts`
     });
 }
 
