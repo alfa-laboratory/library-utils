@@ -1,5 +1,5 @@
 const path = require('path');
-const babylon = require('react-docgen/dist/babylon').default;
+const babylon = require('react-docgen/dist/babelParser').default;
 const resolve = require('resolve').sync;
 const isExportsOrModuleAssignment = require('react-docgen/dist/utils/isExportsOrModuleAssignment').default;
 const isReactComponentClass = require('react-docgen/dist/utils/isReactComponentClass').default;

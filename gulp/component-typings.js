@@ -12,15 +12,19 @@ function componentTypings() {
     function transform(file, encoding, callback) {
         if (file.isStream()) {
             callback();
+
             return;
         }
         const componentName = path.parse(file.path).name;
+
         getReactComponentDefinitionsContent(file.path).then((definitionsContent) => {
             if (!definitionsContent) {
                 // eslint-disable-next-line no-console
                 console.warn(`Unable to create typings for ${file.path}`);
+
                 return callback(null);
             }
+
             return callback(null, new Vinyl({
                 cwd: file.cwd,
                 base: file.base,

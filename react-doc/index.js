@@ -17,8 +17,8 @@ const defaultHandlers = [
     reactDocGen.handlers.displayNameHandler,
     reactDocGen.handlers.componentMethodsHandler,
     reactDocGen.handlers.componentMethodsJsDocHandler,
-    componentPropTypesJsDocHandler
-];
+    componentPropTypesJsDocHandler,
+].filter(Boolean);
 
 function getReactComponentInfo(filePath, parentPath) {
     if (documentation[filePath]) {
@@ -35,8 +35,7 @@ function getReactComponentInfo(filePath, parentPath) {
     );
     info.filePath = filePath;
     if (info.composes) {
-        info.composes = info.composes
-            .map(relativePath => getReactComponentInfo(relativePath, path.dirname(filePath)));
+        info.composes = info.composes.map(relativePath => getReactComponentInfo(relativePath, path.dirname(filePath)));
     } else {
         info.composes = [];
     }
@@ -46,6 +45,5 @@ function getReactComponentInfo(filePath, parentPath) {
     documentation[filePath] = info;
     return info;
 }
-
 
 module.exports = getReactComponentInfo;
