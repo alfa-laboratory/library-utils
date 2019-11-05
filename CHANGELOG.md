@@ -1,3 +1,13 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/alfa-laboratory/library-utils/compare/v2.4.1...v2.5.0) (2019-11-05)
+
+
+### Bug Fixes
+
+* fix typings section in package.json ([#95](https://github.com/alfa-laboratory/library-utils/issues/95)) ([cc5a78c](https://github.com/alfa-laboratory/library-utils/commit/cc5a78c))
+
+
+
 <a name="2.4.1"></a>
 ## [2.4.1](https://github.com/alfa-laboratory/library-utils/compare/v2.4.0...v2.4.1) (2019-07-03)
 
