@@ -15,7 +15,6 @@ const componentTypings = require('./gulp/component-typings');
 const componentDocs = require('./gulp/component-docs');
 const libraryDoc = require('./gulp/library-doc');
 
-
 const defaultOptions = {
     publishDir: '.publish',
     docsDir: 'docs',
@@ -49,7 +48,6 @@ function createTasks(packageName, options = {}) {
     options = Object.assign({}, defaultOptions, options);
     const tsConfigPath = path.resolve(process.cwd(), options.tsConfigFilename);
     const isTsEnabled = fs.existsSync(tsConfigPath);
-
 
     gulp.task('clean', () => del([options.publishDir]));
     gulp.task('clean:docs', () => del([options.publishDir]));
@@ -141,8 +139,10 @@ function createTasks(packageName, options = {}) {
     gulp.task('docs', ['clean:docs'], () => {
         let tsToJs;
         let tsDocs;
+
         if (isTsEnabled) {
             const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
+
             tsToJs = gulp.src(['src/*/*.tsx'])
                 .pipe(tsDocsProject(ts.reporter.nullReporter())).js;
             tsDocs = tsToJs.pipe(clone())
@@ -177,7 +177,7 @@ function createTasks(packageName, options = {}) {
                 // typescript compiler won't compile files with non-ts extensions
                 path.extname = path.extname === '.jsx' ? '.tsx' : '.ts';
             }))
-            .pipe(filter(file => !fs.existsSync(
+            .pipe(filter((file) => !fs.existsSync(
                 // ignore all files, that already emit d.ts file
                 path.join(process.cwd(), options.publishDir, file.relative)
                     .replace(/\.tsx?$/, '.d.ts')

@@ -24,6 +24,7 @@ function libraryDoc(libraryName) {
         latestFile = file;
         const componentName = path.parse(file.path).name;
         const content = file.contents.toString('utf8');
+
         try {
             components.push(structureForFile(content, componentName));
         } catch (e) {
@@ -42,10 +43,12 @@ function libraryDoc(libraryName) {
             if (a.name > b.name) {
                 return 1;
             }
+
             return 0;
         });
 
         const content = ejs.render(TEMPLATE_INDEX, { components, libraryName });
+
         this.push(new Vinyl({
             path: latestFile.path,
             contents: Buffer.from(content)
