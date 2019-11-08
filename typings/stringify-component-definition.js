@@ -45,16 +45,19 @@ function stringifyType(type, componentName, propName, typeRefs) {
         // complex types
         case 'union':
             typeRefs.push(`export type ${typeName} = ${stringifyUnion(type, componentName, propName, typeRefs)};`);
+
             return typeName;
         case 'func':
             return stringifyFunctionDefinition(type, componentName, propName, typeRefs, true);
         case 'enum':
             typeRefs.push(`export type ${typeName} = ${stringifyEnum(type)};`);
+
             return typeName;
         case 'arrayOf':
             return stringifyArray(type, componentName, propName, typeRefs);
         case 'shape':
             typeRefs.push(`export type ${typeName} = ${stringifyShape(type, componentName, propName, typeRefs)};`);
+
             return typeName;
         case 'objectOf':
             typeRefs.push(`export type ${typeName} = ${stringifyObjectOf(
@@ -63,14 +66,17 @@ function stringifyType(type, componentName, propName, typeRefs) {
                 `${propName}Value`,
                 typeRefs
             )};`);
+
             return typeName;
         default:
             if (typeof type.name === 'string' && (type.name.startsWith('React.') || type.name.startsWith('HTML'))) {
                 if (type.name.match(/React.[A-z]+Event$/)) {
                     return `${type.name}<any>`; // All react events are generics
                 }
+
                 return type.name;
             }
+
             return 'any' +
                 `/* Не нашёлся встроенный тип для типа ${JSON.stringify(type)}
                   * https://github.com/alfa-laboratory/library-utils/issues/new
@@ -87,7 +93,7 @@ function stringifyEnum(type) {
 }
 
 function stringifyUnion(type, componentName, propName, typeRefs) {
-    return `${type.value.map(type => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
+    return `${type.value.map((type) => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
 }
 
 function stringifyDescription(description, docblock) {
@@ -107,6 +113,7 @@ function stringifyFunctionDefinition(type, componentName, propName, typeRefs, us
             const type = p.type
                 ? stringifyType(p.type, componentName, `${propName}${upperCamelCase(p.name)}Param`, typeRefs)
                 : 'any';
+
             return `${p.name}?: ${type}`;
         });
 
@@ -136,11 +143,12 @@ function stringifyField(fieldName, type, componentName, propName, typeRefs) {
 
 function stringifyShape(type, componentName, propName, typeRefs) {
     const fields = type.value;
+
     /* eslint-disable indent */
     return `{
         ${Object
         .keys(fields)
-        .map(fieldName => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
+        .map((fieldName) => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
         .join(';\n')}
     }`;
     /* eslint-enable indent */
@@ -148,6 +156,7 @@ function stringifyShape(type, componentName, propName, typeRefs) {
 
 function stringifyObjectOf(type, componentName, propName, typeRefs) {
     const fieldType = type.value;
+
     return `{
         [key: string]: ${stringifyType(fieldType, componentName, propName, typeRefs)};
     }`;
@@ -195,7 +204,7 @@ function stringifyComponentDefinition(info) {
     );
 
     const methodsDefs = info.methods
-        .map(type => stringifyClassMethod(type, info.displayName, typeRefs));
+        .map((type) => stringifyClassMethod(type, info.displayName, typeRefs));
 
     return (
         `

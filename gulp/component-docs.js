@@ -17,6 +17,7 @@ function componentDocs(libraryName) {
     function transform(file, encoding, callback) {
         if (file.isStream()) {
             callback();
+
             return;
         }
         try {

@@ -9,7 +9,7 @@ function formatTs(definition) {
         tslint: false,
         editorconfig: false,
         tsfmt: true
-    }).then(result => result.dest);
+    }).then((result) => result.dest);
 }
 
 module.exports = formatTs;
