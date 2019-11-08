@@ -1,3 +1,8 @@
+<a name="2.6.0"></a>
+# [2.6.0](https://github.com/alfa-laboratory/library-utils/compare/v2.5.0...v2.6.0) (2019-11-08)
+
+
+
 <a name="2.5.0"></a>
 # [2.5.0](https://github.com/alfa-laboratory/library-utils/compare/v2.4.1...v2.5.0) (2019-11-05)
 
