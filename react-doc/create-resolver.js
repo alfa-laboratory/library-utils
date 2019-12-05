@@ -1,5 +1,5 @@
 const path = require('path');
-const babylon = require('react-docgen/dist/babelParser').default;
+const createBabylonParser = require('react-docgen/dist/babelParser').default;
 const resolve = require('resolve').sync;
 const isExportsOrModuleAssignment = require('react-docgen/dist/utils/isExportsOrModuleAssignment').default;
 const isReactComponentClass = require('react-docgen/dist/utils/isReactComponentClass').default;
@@ -13,6 +13,8 @@ const resolveToModule = require('react-docgen/dist/utils/resolveToModule').defau
 const getSourceFileContent = require('./get-source-file-content');
 const resolveExportDeclaration = require('./docgen/resolve-export-declaration');
 const isDecoratedBy = require('./docgen/is-decorated-by');
+
+const babylon = createBabylonParser();
 
 const ERROR_MULTIPLE_DEFINITIONS = 'Multiple exported component definitions found.';
 
@@ -65,14 +67,14 @@ function findExportedComponentDefinition(ast, recast, filePath) {
 
                     const src = getSourceFileContent(importedModules[superClass.value.name], filePath);
                     filePath = src.filePath; // update file path, so we can correctly resolve imports
-                    linkedFile = recast.parse(src.content, { esprima: babylon });
+                    linkedFile = recast.parse(src.content, { parser: babylon });
                     return acc;
                 }
                 if (def.get('value') && def.get('value').value) {
                     // if we found reexported file - parse it with recast and return
                     const src = getSourceFileContent(def.get('value').value, filePath);
                     filePath = src.filePath; // update file path, so we can correctly resolve imports
-                    linkedFile = recast.parse(src.content, { esprima: babylon });
+                    linkedFile = recast.parse(src.content, { parser: babylon });
                 }
                 return acc;
             }, []);
