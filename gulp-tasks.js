@@ -19,13 +19,13 @@ const defaultOptions = {
     publishDir: '.publish',
     docsDir: 'docs',
     tsConfigFilename: 'tsconfig.json',
-    componentsGlob: ['src/*/*.jsx', '!src/*/*-test.jsx', '!src/*/*-benchmark.jsx'],
+    componentsGlob: ['src/*/*.jsx', '!src/*/*.test.jsx', '!src/*/*-benchmark.jsx'],
     tsComponentsGlob: ['src/*/*.tsx'],
-    jsGlob: ['src/**/*.{js,jsx}', '!src/**/*-test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
+    jsGlob: ['src/**/*.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
     autoDtsGlob: [
         'src/**/*.{js,jsx}', '!src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
     ],
-    tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*-test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
+    tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
     cssCopyGlob: ['src/**/vars/**/*.css', 'src/vars*.css'],
     resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,woff,json}'],
@@ -132,38 +132,36 @@ function createTasks(packageName, options = {}) {
             .on('error', handleError)
     );
 
-    gulp.task('docs',
-        () => {
-            let tsToJs;
-            let tsDocs;
+    gulp.task('docs', gulp.series('clean:docs', () => {
+        let tsToJs;
+        let tsDocs;
 
-            if (isTsEnabled) {
-                const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
+        if (isTsEnabled) {
+            const tsDocsProject = ts.createProject(options.tsConfigFilename, { jsx: 'preserve', target: 'es6' });
 
-                tsToJs = gulp.src(['src/*/*.tsx'])
-                    .pipe(tsDocsProject(ts.reporter.nullReporter())).js;
-                tsDocs = tsToJs.pipe(clone())
-                    .pipe(componentDocs(packageName));
-            }
-
-            const jsDocs = gulp.src(options.componentsGlob)
+            tsToJs = gulp.src(['src/*/*.tsx'])
+                .pipe(tsDocsProject(ts.reporter.nullReporter())).js;
+            tsDocs = tsToJs.pipe(clone())
                 .pipe(componentDocs(packageName));
+        }
 
-            const indexFile = es.merge([gulp.src(options.componentsGlob)].concat(isTsEnabled ? [tsToJs] : []))
-                .pipe(libraryDoc(packageName))
-                .pipe(rename((filePath) => {
-                    filePath.dirname = '';
-                    filePath.basename = 'README';
-                    filePath.extname = '.md';
-                }));
+        const jsDocs = gulp.src(options.componentsGlob)
+            .pipe(componentDocs(packageName));
 
-            return es
-                .merge([jsDocs, indexFile].concat(isTsEnabled ? [tsDocs] : []))
-                .pipe(gulp.dest(options.docsDir));
-        });
+        const indexFile = es.merge([gulp.src(options.componentsGlob)].concat(isTsEnabled ? [tsToJs] : []))
+            .pipe(libraryDoc(packageName))
+            .pipe(rename((filePath) => {
+                filePath.dirname = '';
+                filePath.basename = 'README';
+                filePath.extname = '.md';
+            }));
+
+        return es
+            .merge([jsDocs, indexFile].concat(isTsEnabled ? [tsDocs] : []))
+            .pipe(gulp.dest(options.docsDir));
+    }));
 
     gulp.task('dts', gulp.series('js', 'publish-files', 'typings', () => {
-        // TODO: check tsOptions
         const tsOptions = {
             declaration: true,
             allowSyntheticDefaultImports: true,
@@ -172,19 +170,12 @@ function createTasks(packageName, options = {}) {
             noImplicitAny: false,
             allowJs: true,
             experimentalDecorators: true,
-            module: 'esnext',
             moduleResolution: 'classic',
             esModuleInterop: true,
             skipLibCheck: true
         };
 
         return gulp.src(options.autoDtsGlob)
-        // TODO: remove this code or not
-
-            // .pipe(rename((path) => {
-            //     // typescript compiler won't compile files with non-ts extensions
-            //     path.extname = path.extname === '.jsx' ? '.tsx' : '.ts';
-            // }))
             .pipe(filter(file => !fs.existsSync(
                 // ignore all files, that already emit d.ts file
                 path.join(process.cwd(), options.publishDir, file.relative)
