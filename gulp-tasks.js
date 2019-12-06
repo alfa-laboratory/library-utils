@@ -185,7 +185,7 @@ function createTasks(packageName, options = {}) {
             .dts.pipe(gulp.dest(options.publishDir));
     }));
 
-    const targetTasks = ['js', 'css', 'resources', 'publish-files', 'dts'];
+    const targetTasks = ['js', 'css', 'resources', 'typings', 'publish-files', 'dts'];
 
     if (isTsEnabled) {
         targetTasks.push('ts');
