@@ -166,7 +166,8 @@ function createTasks(packageName, options = {}) {
             declaration: true,
             allowSyntheticDefaultImports: true,
             lib: ['dom', 'es2015', 'es2016'],
-            allowJs: true
+            allowJs: true,
+            skipLibCheck: true
         };
 
         return gulp.src(options.autoDtsGlob)
