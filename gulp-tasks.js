@@ -20,7 +20,7 @@ const defaultOptions = {
     docsDir: 'docs',
     tsConfigFilename: 'tsconfig.json',
     componentsGlob: ['src/*/*.jsx', '!src/*/*.test.jsx', '!src/*/*-benchmark.jsx'],
-    tsComponentsGlob: ['src/*/*.tsx'],
+    tsComponentsGlob: ['src/*/*.tsx', '!src/*/*.test.tsx', '!src/*/*-benchmark.tsx'],
     jsGlob: ['src/**/*.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
     autoDtsGlob: [
         'src/**/*.{js,jsx}', '!src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
@@ -167,11 +167,8 @@ function createTasks(packageName, options = {}) {
             allowSyntheticDefaultImports: true,
             lib: ['dom', 'esnext'],
             jsx: 'react',
-            noImplicitAny: false,
             allowJs: true,
             experimentalDecorators: true,
-            moduleResolution: 'classic',
-            esModuleInterop: true,
             skipLibCheck: true
         };
 
