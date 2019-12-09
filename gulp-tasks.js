@@ -165,11 +165,8 @@ function createTasks(packageName, options = {}) {
         const tsOptions = {
             declaration: true,
             allowSyntheticDefaultImports: true,
-            lib: ['dom', 'esnext'],
-            jsx: 'react',
-            allowJs: true,
-            experimentalDecorators: true,
-            skipLibCheck: true
+            lib: ['dom', 'es2015', 'es2016'],
+            allowJs: true
         };
 
         return gulp.src(options.autoDtsGlob)
