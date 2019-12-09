@@ -185,13 +185,16 @@ function createTasks(packageName, options = {}) {
             .dts.pipe(gulp.dest(options.publishDir));
     }));
 
-    const targetTasks = ['js', 'css', 'resources', 'typings', 'publish-files', 'dts'];
+    const parallelCompileTasks = ['js', 'css', 'resources', 'typings', 'publish-files'];
+    const targetTasks = ['clean', gulp.parallel(...parallelCompileTasks), 'dts'];
 
     if (isTsEnabled) {
         targetTasks.push('ts');
     }
 
-    gulp.task('compile', gulp.series('clean', gulp.parallel(...targetTasks), checkErrors));
+    targetTasks.push(checkErrors);
+
+    gulp.task('compile', gulp.series(...targetTasks));
 }
 
 module.exports = createTasks;
