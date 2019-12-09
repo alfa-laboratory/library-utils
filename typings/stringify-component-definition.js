@@ -95,7 +95,7 @@ function stringifyEnum(type) {
 function stringifyUnion(type, componentName, propName, typeRefs) {
     const values = type.value || type.elements || [];
 
-    return `${values.map(type => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
+    return `${values.map((type) => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
 }
 
 function stringifyDescription(description, docblock) {
@@ -150,7 +150,7 @@ function stringifyShape(type, componentName, propName, typeRefs) {
     return `{
         ${Object
         .keys(fields)
-        .map(fieldName => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
+        .map((fieldName) => stringifyField(fieldName, fields[fieldName], componentName, propName, typeRefs))
         .join(';\n')}
     }`;
     /* eslint-enable indent */
@@ -206,19 +206,19 @@ function stringifyComponentDefinition(info) {
     );
 
     const methodsDefs = info.methods
-        .map(type => stringifyClassMethod(type, info.displayName, typeRefs));
+        .map((type) => stringifyClassMethod(type, info.displayName, typeRefs));
 
     return (
         `
         import * as React from 'react';
         import * as Type from 'prop-types';
-        
+
         ${DEPP_READONLY_TYPES}
 
         ${typeRefs.join('\n')}
 
         ${propsDef}
-        
+
         export type ${propTypesTypeName} = Type.ValidationMap<${propsInterfaceName}>;
 
         ${stringifyDescription(info.description, info.docblock)}

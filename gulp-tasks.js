@@ -173,7 +173,7 @@ function createTasks(packageName, options = {}) {
         };
 
         return gulp.src(options.autoDtsGlob)
-            .pipe(filter(file => !fs.existsSync(
+            .pipe(filter((file) => !fs.existsSync(
                 // ignore all files, that already emit d.ts file
                 path.join(process.cwd(), options.publishDir, file.relative)
                     .replace(/\.[t|j]sx?$/, '.d.ts')
