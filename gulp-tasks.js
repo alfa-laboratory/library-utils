@@ -29,7 +29,7 @@ const defaultOptions = {
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
     cssCopyGlob: ['src/**/vars/**/*.css', 'src/vars*.css'],
     resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,woff,json}'],
-    publishFilesGlob: ['package.json', '*.md', 'LICENSE']
+    publishFilesGlob: ['package.json', '*.md', 'LICENSE?(.md)']
 };
 
 const errors = [];
