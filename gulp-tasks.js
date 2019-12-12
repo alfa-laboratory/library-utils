@@ -166,15 +166,19 @@ function createTasks(packageName, options = {}) {
             declaration: true,
             allowSyntheticDefaultImports: true,
             lib: ['dom', 'es2015', 'es2016'],
-            allowJs: true,
-            skipLibCheck: true
+            skipLibCheck: true,
+            experimentalDecorators: true
         };
 
         return gulp.src(options.autoDtsGlob)
+            .pipe(rename((path) => {
+                // typescript compiler won't compile files with non-ts extensions
+                path.extname = path.extname === '.jsx' ? '.tsx' : '.ts';
+            }))
             .pipe(filter((file) => !fs.existsSync(
                 // ignore all files, that already emit d.ts file
                 path.join(process.cwd(), options.publishDir, file.relative)
-                    .replace(/\.[t|j]sx?$/, '.d.ts')
+                    .replace(/\.tsx?$/, '.d.ts')
             )))
             .pipe(ts(tsOptions, ts.reporter.nullReporter())) // ignore all errors at compile time
             .dts.pipe(gulp.dest(options.publishDir));
