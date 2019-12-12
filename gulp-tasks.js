@@ -167,7 +167,8 @@ function createTasks(packageName, options = {}) {
             allowSyntheticDefaultImports: true,
             lib: ['dom', 'es2015', 'es2016'],
             skipLibCheck: true,
-            experimentalDecorators: true
+            experimentalDecorators: true,
+            jsx: 'react'
         };
 
         return gulp.src(options.autoDtsGlob)
