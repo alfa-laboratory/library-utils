@@ -23,7 +23,7 @@ const defaultOptions = {
     tsComponentsGlob: ['src/*/*.tsx', '!src/*/*.test.tsx', '!src/*/*-benchmark.tsx'],
     jsGlob: ['src/**/*.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
     autoDtsGlob: [
-        'src/**/*.{js,jsx}', '!src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
+        'src/**/*.{js,jsx}', 'src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
     ],
     tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
