@@ -93,7 +93,9 @@ function stringifyEnum(type) {
 }
 
 function stringifyUnion(type, componentName, propName, typeRefs) {
-    return `${type.value.map((type) => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
+    const values = type.value || type.elements || [];
+
+    return `${values.map((type) => stringifyType(type, componentName, propName, typeRefs)).join(' | ')}`;
 }
 
 function stringifyDescription(description, docblock) {
@@ -210,13 +212,13 @@ function stringifyComponentDefinition(info) {
         `
         import * as React from 'react';
         import * as Type from 'prop-types';
-        
+
         ${DEPP_READONLY_TYPES}
 
         ${typeRefs.join('\n')}
 
         ${propsDef}
-        
+
         export type ${propTypesTypeName} = Type.ValidationMap<${propsInterfaceName}>;
 
         ${stringifyDescription(info.description, info.docblock)}
