@@ -23,13 +23,16 @@ const defaultOptions = {
     tsComponentsGlob: ['src/*/*.tsx', '!src/*/*.test.tsx', '!src/*/*-benchmark.tsx'],
     jsGlob: ['src/**/*.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'],
     autoDtsGlob: [
-        'src/**/*.{js,jsx}', 'src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
+        'src/**/*.{js,jsx}', '!src/**/index.{js,jsx}', '!src/**/*.test.{js,jsx}', '!src/**/*-benchmark.{js,jsx}'
     ],
     tsGlob: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/**/*-benchmark.{ts,tsx}'],
     cssGlob: ['src/**/*.css', '!src/vars/**/*.css', '!src/vars*.css'],
     cssCopyGlob: ['src/**/vars/**/*.css', 'src/vars*.css'],
     resourcesGlob: ['src/**/*.{png,gif,jpg,svg,ttf,woff,json}'],
-    publishFilesGlob: ['package.json', '*.md', 'LICENSE?(.md)']
+    publishFilesGlob: ['package.json', '*.md', 'LICENSE?(.md)'],
+    // все было сломано тут https://github.com/alfa-laboratory/library-utils/pull/95
+    // library utils не умеет хорошо генерить тайпинги по index.js файлов а реэксопрты в index.js файлах как правило работают чисто потому что повезло
+    useComponentDts: false
 };
 
 const errors = [];
@@ -78,7 +81,7 @@ function createTasks(packageName, options = {}) {
 
     gulp.task('ts:packages',
         () => gulp.src(options.tsComponentsGlob)
-            .pipe(componentPackage())
+            .pipe(componentPackage(options.useComponentDts))
             .pipe(gulp.dest(options.publishDir))
             .on('error', handleError)
     );
@@ -89,7 +92,7 @@ function createTasks(packageName, options = {}) {
         const components = gulp.src(options.componentsGlob);
         const packages = components
             .pipe(clone())
-            .pipe(componentPackage())
+            .pipe(componentPackage(options.useComponentDts))
             .on('error', handleError);
 
         const typingFiles = components
