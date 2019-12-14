@@ -9,7 +9,7 @@ const Vinyl = require('vinyl');
  * @param {*} file Gulp stream file instance
  * @returns {String}
  */
-function getComponentPackage(file) {
+function getComponentPackage(file, useComponentDts) {
     const dirname = path.dirname(file.path);
     const componentName = path.parse(file.path).name;
     const isIndexFileExist = fs.existsSync(path.join(dirname, 'index.js')) ||
@@ -17,7 +17,7 @@ function getComponentPackage(file) {
 
     return JSON.stringify({
         main: isIndexFileExist ? 'index.js' : `${componentName}.js`,
-        types: isIndexFileExist ? 'index.d.ts' : `${componentName}.d.ts`
+        types: isIndexFileExist && !useComponentDts ? 'index.d.ts' : `${componentName}.d.ts`
     });
 }
 
@@ -26,7 +26,7 @@ function getComponentPackage(file) {
  *
  * @returns {Function}
  */
-function componentPackage() {
+function componentPackage(useComponentDts) {
     function transform(file, encoding, callback) {
         if (file.isStream()) {
             callback();
@@ -39,7 +39,7 @@ function componentPackage() {
             cwd: file.cwd,
             base: file.base,
             path: path.join(dirname, 'package.json'),
-            contents: Buffer.from(getComponentPackage(file))
+            contents: Buffer.from(getComponentPackage(file, useComponentDts))
         }));
     }
 

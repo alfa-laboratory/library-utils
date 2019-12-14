@@ -1,3 +1,23 @@
+<a name="3.0.2"></a>
+## [3.0.2](https://github.com/alfa-laboratory/library-utils/compare/v3.0.1...v3.0.2) (2019-12-13)
+
+
+### Bug Fixes
+
+* hotfix typings for components ([8427628](https://github.com/alfa-laboratory/library-utils/commit/8427628))
+
+
+
+<a name="3.0.1"></a>
+## [3.0.1](https://github.com/alfa-laboratory/library-utils/compare/v3.0.0...v3.0.1) (2019-12-12)
+
+
+
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/alfa-laboratory/library-utils/compare/v2.6.0...v3.0.0) (2019-12-12)
+
+
+
 <a name="2.6.0"></a>
 # [2.6.0](https://github.com/alfa-laboratory/library-utils/compare/v2.5.0...v2.6.0) (2019-11-08)
 
