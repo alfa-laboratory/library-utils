@@ -32,7 +32,6 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
     "husky": "^3.1.0",
     "arui-presets-lint": "^2.0.0",
     "conventional-changelog-cli": "1.3.14",
@@ -55,7 +54,6 @@
     "lint": "eslint ./*.js ./gulp/*.js ./typings/*.js",
     "test": "jest",
     "postversion": "git push origin master && git push --tags && npm publish",
-    "precommit": "npm run lint && npm run test",
     "release-patch": "npm version patch -m 'chore(*): patch version'",
     "release-minor": "npm version minor -m 'chore(*): minor version'",
     "release-major": "npm version major -m 'chore(*): major version'",
@@ -63,7 +61,13 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npm run lint && npm run test",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "commitlint": {
+    "extends": [
+      "./node_modules/arui-presets-lint/commitlint"
+    ]
   }
 }
