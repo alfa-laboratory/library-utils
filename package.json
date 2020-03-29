@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "del": "^5.1.0",
-    "ejs": "^2.7.1",
+    "ejs": "^3.0.2",
     "event-stream": "^4.0.1",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
