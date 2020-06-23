@@ -185,6 +185,7 @@ function createTasks(packageName, options = {}) {
                     .replace(/\.tsx?$/, '.d.ts')
             )))
             .pipe(ts(tsOptions, ts.reporter.nullReporter())) // ignore all errors at compile time
+            .on('error', () => {}) // ignore all errors at compile time gulp 3 compatible
             .dts.pipe(gulp.dest(options.publishDir));
     }));
 
