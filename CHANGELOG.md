@@ -1,3 +1,13 @@
+<a name="3.0.3"></a>
+## [3.0.3](https://github.com/alfa-laboratory/library-utils/compare/v3.0.2...v3.0.3) (2020-08-27)
+
+
+### Bug Fixes
+
+* **gulp-tasks:** добавляет игнор ошибок для TS, ts.reporter почему-то не работает ([8614875](https://github.com/alfa-laboratory/library-utils/commit/8614875))
+
+
+
 <a name="3.0.2"></a>
 ## [3.0.2](https://github.com/alfa-laboratory/library-utils/compare/v3.0.1...v3.0.2) (2019-12-13)
 
