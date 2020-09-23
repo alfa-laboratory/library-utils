@@ -2,10 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const createTasks = require('./gulp-tasks');
 
-function findPackageName() {
-    const packageJsonPath = path.resolve(process.cwd(), 'package.json');
+const packageJsonPath = path.resolve(process.cwd(), 'package.json');
+const appPackage = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
-    return JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).name;
-}
 
-createTasks(findPackageName());
+createTasks(appPackage.name, appPackage['library-utils']);

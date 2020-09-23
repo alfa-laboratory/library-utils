@@ -28,7 +28,7 @@ gulpfile
 "compile": "gulp --cwd . --gulpfile ./node_modules/library-utils/gulpfile.js compile",
 ```
 
-Для более тонкой настройки используйте gulp-tasks.
+Для более тонкой настройки используйте gulp-tasks или настройки в `package.json`.
 
 gulp-tasks
 ----------
@@ -52,7 +52,8 @@ createTasks('arui-feather');
 * `options` - не обязательный. Настройки путей.
   * `publishDir` - имя папки для публикации, туда будут записываться скомпилированные файлы
   * `docsDir` - имя папки для документации
-  * `tsConfigFilename` - путь до файла с конфигурацией typescript.
+  * `tsCompiler` - компилятор для typescript
+  * `tsConfigFilename` - путь до файла с конфигурацией typescript
   * `componentsGlob` - glob для файлов js компонентов
   * `tsComponentsGlob` - glob для файлов ts компонентов
   * `jsGlob` - glob для всех публикуемых js файлов пакета
@@ -62,6 +63,22 @@ createTasks('arui-feather');
   * `cssCopyGlob` - glob для всех копируемых css фалов пакета
   * `resourcesGlob` - glob для всех ресурсных файлов пакета (картинки, шрифты)
   * `publishFilesGlob` - glob для всех дополнительных файлов, которые должны попасть в публикацию
+
+Настройки в `package.json`
+----------------
+
+Так же можно указать нужные свойства из `options` в ключе `library-utils`
+
+Пример `package.json` вашего проекта:
+```
+{
+    "name": "arui-feather",
+    "library-utils": {
+        "publishDir": ".my-custom-publish-dir",
+        "tsCompiler": "my-fork-of-typescript",
+    }
+}
+```
 
 componentPackage
 ----------------

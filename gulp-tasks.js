@@ -66,7 +66,13 @@ function createTasks(packageName, options = {}) {
     );
 
     gulp.task('ts:compile', () => {
-        const tsProject = ts.createProject(options.tsConfigFilename, { declaration: true });
+        const tsProjectSettings = { declaration: true };
+
+        if (options.tsCompiler) {
+            tsProjectSettings.typescript = require(options.tsCompiler);
+        }
+
+        const tsProject = ts.createProject(options.tsConfigFilename, tsProjectSettings);
         const tsResult = gulp.src(options.tsGlob)
             .pipe(sourcemaps.init())
             .pipe(tsProject())
