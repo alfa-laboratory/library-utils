@@ -1,3 +1,19 @@
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/alfa-laboratory/library-utils/compare/v3.0.3...v3.2.0) (2020-09-24)
+
+
+### Bug Fixes
+
+* lint fixes ([9989b0b](https://github.com/alfa-laboratory/library-utils/commit/9989b0b))
+* **gulpfile:** removed empty line ([0d7d8e3](https://github.com/alfa-laboratory/library-utils/commit/0d7d8e3))
+
+
+### Features
+
+* **gulp-tasks:** added tsCompiler for 'ts:compile' ([5dfa927](https://github.com/alfa-laboratory/library-utils/commit/5dfa927))
+
+
+
 <a name="3.0.3"></a>
 ## [3.0.3](https://github.com/alfa-laboratory/library-utils/compare/v3.0.2...v3.0.3) (2020-08-27)
 
