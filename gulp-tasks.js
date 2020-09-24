@@ -69,6 +69,7 @@ function createTasks(packageName, options = {}) {
         const tsProjectSettings = { declaration: true };
 
         if (options.tsCompiler) {
+            // eslint-disable-next-line import/no-dynamic-require,global-require
             tsProjectSettings.typescript = require(options.tsCompiler);
         }
 
